@@ -1,1 +1,120 @@
+name: CI
 
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  database:
+    name: Database (PostgreSQL + PostGIS + pgTAP)
+    runs-on: ubuntu-24.04
+    services:
+      postgres:
+        image: postgis/postgis:16-3.4
+        env:
+          POSTGRES_PASSWORD: postgres
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U postgres" --health-interval 5s --health-timeout 5s --health-retries 10
+    env:
+      PGHOST: localhost
+      PGPORT: '5432'
+      PGUSER: postgres
+      PGPASSWORD: postgres
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install pgTAP and pg_prove
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq libtap-parser-sourcehandler-pgtap-perl postgresql-client
+          docker exec ${{ job.services.postgres.id }} sh -c "apt-get update -qq && apt-get install -y -qq postgresql-16-pgtap"
+      - name: Database tests
+        run: bash tools/db/test.sh
+
+  functions:
+    name: Edge functions (Deno)
+    runs-on: ubuntu-24.04
+    services:
+      postgres:
+        image: postgis/postgis:16-3.4
+        env:
+          POSTGRES_PASSWORD: postgres
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U postgres" --health-interval 5s --health-timeout 5s --health-retries 10
+    env:
+      PGHOST: localhost
+      PGPORT: '5432'
+      PGUSER: postgres
+      PGPASSWORD: postgres
+    steps:
+      - uses: actions/checkout@v4
+      - uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+      - name: Lint, format and type-check
+        working-directory: supabase/functions
+        run: |
+          deno lint
+          deno fmt --check
+          deno check identify/index.ts care-tips/index.ts delete-account/index.ts cleanup/index.ts send-sms/index.ts
+      - name: Unit tests
+        working-directory: supabase/functions
+        run: deno test --allow-env tests/
+      - name: Install PostgREST
+        run: |
+          curl -sSL -o /tmp/pgrst.tar.xz https://github.com/PostgREST/postgrest/releases/download/v13.0.8/postgrest-v13.0.8-linux-static-x86-64.tar.xz
+          tar -xJf /tmp/pgrst.tar.xz -C /usr/local/bin
+      - name: Integration tests against PostgreSQL + PostgREST
+        run: bash tools/db/integration.sh
+
+  app:
+    name: Flutter app
+    runs-on: ubuntu-24.04
+    defaults:
+      run:
+        working-directory: app
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 3.47.6
+          channel: stable
+          cache: true
+      - name: Check Bangla/English strings and hard-coded text
+        run: python3 tool/check_l10n.py
+      - name: Generate platform files
+        run: bash tool/bootstrap_platforms.sh
+      - run: flutter pub get
+      - name: Analyse
+        run: flutter analyze --no-fatal-infos
+      - name: Unit, contract and widget tests
+        run: flutter test
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Build Android APK (debug signing; placeholder server settings)
+        run: >-
+          flutter build apk --release
+          --dart-define=SUPABASE_URL=https://example.supabase.co
+          --dart-define=SUPABASE_PUBLISHABLE_KEY=placeholder
+      - uses: actions/upload-artifact@v4
+        with:
+          name: hobbylens-apk
+          path: app/build/app/outputs/flutter-apk/app-release.apk
+          retention-days: 14
+
+  bakeoff:
+    name: Bake-off tool
+    runs-on: ubuntu-24.04
+    defaults:
+      run:
+        working-directory: tools/bakeoff
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m unittest -v test_bakeoff
