@@ -12,20 +12,23 @@ import 'identify_screen.dart';
 /// retake the photo.
 Future<void> startIdentification(BuildContext context, RequestCategory category) async {
   final services = AppScope.of(context);
-  while (context.mounted) {
+  while (true) {
+    if (!context.mounted) return;
     final useCamera = await _chooseSource(context, category);
     if (!context.mounted) return;
     if (useCamera == null) return;
 
-    final PickedPhoto? photo;
+    final PickedPhoto? picked;
     try {
-      photo = await services.photos.pick(camera: useCamera);
+      picked = await services.photos.pick(camera: useCamera);
     } on PlatformException {
       if (context.mounted) _snack(context, context.l10n.errorPhoto);
       return;
     }
     if (!context.mounted) return;
-    if (photo == null) return;
+    if (picked == null) return;
+    // A non-nullable local, so the route builder closure below can use it without a null check.
+    final PickedPhoto photo = picked;
     if (photo.bytes.length > AppConfig.photoMaxBytes) {
       _snack(context, context.l10n.errorPhoto);
       continue;
