@@ -16,4 +16,15 @@ for f in supabase/migrations/*.sql; do echo "migrate  $f"; run "$f"; done
 echo "seed     supabase/seed.sql"; run supabase/seed.sql
 psql -q -d "$DB" -c "create extension if not exists pgtap" >/dev/null
 
-pg_prove -d "$DB" supabase/tests/database/*.test.sql
+if command -v pg_prove >/dev/null 2>&1; then
+  pg_prove -d "$DB" supabase/tests/database/*.test.sql
+else
+  # Fallback without pg_prove: run each file with psql and fail on any "not ok" or plan mismatch.
+  failed=0
+  for f in supabase/tests/database/*.test.sql; do
+    out=$(psql -X -q -At -v ON_ERROR_STOP=1 -d "$DB" -f "$f" 2>&1) || { echo "FAIL $f"; echo "$out"; failed=1; continue; }
+    if echo "$out" | grep -Eq '^not ok|Looks like you planned'; then echo "FAIL $f"; echo "$out" | grep -E '^not ok|#'; failed=1
+    else echo "ok   $f ($(echo "$out" | grep -c '^ok') tests)"; fi
+  done
+  exit $failed
+fi
