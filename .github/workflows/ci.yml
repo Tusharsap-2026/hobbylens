@@ -9,14 +9,6 @@ jobs:
   database:
     name: Database (PostgreSQL + PostGIS + pgTAP)
     runs-on: ubuntu-24.04
-    services:
-      postgres:
-        image: postgis/postgis:16-3.4
-        env:
-          POSTGRES_PASSWORD: postgres
-        ports: ['5432:5432']
-        options: >-
-          --health-cmd "pg_isready -U postgres" --health-interval 5s --health-timeout 5s --health-retries 10
     env:
       PGHOST: localhost
       PGPORT: '5432'
@@ -24,13 +16,39 @@ jobs:
       PGPASSWORD: postgres
     steps:
       - uses: actions/checkout@v4
-      - name: Install pgTAP and pg_prove
+      - name: Error-report helper
+        shell: bash
         run: |
-          sudo apt-get update -qq
-          sudo apt-get install -y -qq libtap-parser-sourcehandler-pgtap-perl postgresql-client
-          docker exec ${{ job.services.postgres.id }} sh -c "apt-get update -qq && apt-get install -y -qq postgresql-16-pgtap"
+          # Repeats a failed step's output as an annotation, so the error can be read without opening the log.
+          cat > "$RUNNER_TEMP/ann.sh" <<'EOF'
+          run_annotated() {
+            local title="$1" lines="${2:-80}"; shift 2
+            local code=0; "$@" > "$RUNNER_TEMP/out.txt" 2>&1 || code=$?
+            cat "$RUNNER_TEMP/out.txt"
+            if [ $code -ne 0 ]; then
+              local msg
+              msg=$(tail -n "$lines" "$RUNNER_TEMP/out.txt" | sed -e 's/%/%25/g' -e 's/\r//g' | awk '{printf "%s%%0A", $0}')
+              echo "::error title=${title}::${msg}"
+            fi
+            return $code
+          }
+          EOF
+      - name: Install PostgreSQL 16, PostGIS and pgTAP
+        run: |
+          source "$RUNNER_TEMP/ann.sh"
+          run_annotated "Install PostgreSQL" 40 bash -c '
+            sudo apt-get update -qq &&
+            sudo apt-get install -y -qq postgresql-16 postgresql-16-postgis-3 postgresql-16-pgtap &&
+            (sudo apt-get install -y -qq libtap-parser-sourcehandler-pgtap-perl || echo "pg_prove not available; using psql fallback")'
+      - name: Start PostgreSQL
+        run: |
+          sudo pg_ctlcluster 16 main start || sudo systemctl start postgresql
+          for i in $(seq 1 20); do pg_isready -h localhost && break; sleep 1; done
+          sudo -u postgres psql -c "alter user postgres password 'postgres'"
       - name: Database tests
-        run: bash tools/db/test.sh
+        run: |
+          source "$RUNNER_TEMP/ann.sh"
+          run_annotated "Database tests" 80 bash tools/db/test.sh
 
   functions:
     name: Edge functions (Deno)
@@ -77,34 +95,73 @@ jobs:
         working-directory: app
     steps:
       - uses: actions/checkout@v4
+      - name: Error-report helper
+        shell: bash
+        working-directory: .
+        run: |
+          # Repeats a failed step's output as an annotation, so the error can be read without opening the log.
+          cat > "$RUNNER_TEMP/ann.sh" <<'EOF'
+          run_annotated() {
+            local title="$1" lines="${2:-80}"; shift 2
+            local code=0; "$@" > "$RUNNER_TEMP/out.txt" 2>&1 || code=$?
+            cat "$RUNNER_TEMP/out.txt"
+            if [ $code -ne 0 ]; then
+              local msg
+              msg=$(tail -n "$lines" "$RUNNER_TEMP/out.txt" | sed -e 's/%/%25/g' -e 's/\r//g' | awk '{printf "%s%%0A", $0}')
+              echo "::error title=${title}::${msg}"
+            fi
+            return $code
+          }
+          EOF
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: 3.47.6
           channel: stable
           cache: true
       - name: Check Bangla/English strings and hard-coded text
-        run: python3 tool/check_l10n.py
+        run: |
+          source "$RUNNER_TEMP/ann.sh"
+          run_annotated "Strings check" 60 python3 tool/check_l10n.py
       - name: Generate platform files
-        run: bash tool/bootstrap_platforms.sh
+        run: |
+          source "$RUNNER_TEMP/ann.sh"
+          run_annotated "Generate platform files" 60 bash tool/bootstrap_platforms.sh
       - run: flutter pub get
       - name: Analyse
-        run: flutter analyze --no-fatal-infos
+        id: analyse
+        continue-on-error: true
+        run: |
+          source "$RUNNER_TEMP/ann.sh"
+          run_annotated "Analyse" 200 flutter analyze --no-fatal-infos
       - name: Unit, contract and widget tests
-        run: flutter test
+        id: tests
+        continue-on-error: true
+        run: |
+          source "$RUNNER_TEMP/ann.sh"
+          run_annotated "Tests" 150 flutter test
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: '17'
       - name: Build Android APK (debug signing; placeholder server settings)
-        run: >-
-          flutter build apk --release
-          --dart-define=SUPABASE_URL=https://example.supabase.co
-          --dart-define=SUPABASE_PUBLISHABLE_KEY=placeholder
+        id: build
+        continue-on-error: true
+        run: |
+          source "$RUNNER_TEMP/ann.sh"
+          run_annotated "Build APK" 120 flutter build apk --release \
+            --dart-define=SUPABASE_URL=https://example.supabase.co \
+            --dart-define=SUPABASE_PUBLISHABLE_KEY=placeholder
       - uses: actions/upload-artifact@v4
+        if: steps.build.outcome == 'success'
         with:
           name: hobbylens-apk
           path: app/build/app/outputs/flutter-apk/app-release.apk
           retention-days: 14
+      - name: Fail the job if any check failed
+        if: steps.analyse.outcome == 'failure' || steps.tests.outcome == 'failure' || steps.build.outcome == 'failure'
+        run: |
+          echo "analyse=${{ steps.analyse.outcome }} tests=${{ steps.tests.outcome }} build=${{ steps.build.outcome }}"
+          exit 1
 
   bakeoff:
     name: Bake-off tool
