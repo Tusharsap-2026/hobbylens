@@ -1,0 +1,946 @@
+<title>HobbyLens Preview</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700&family=Noto+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0..1,0&display=block">
+<style>
+:root{
+  --page:#eef2ee; --bg:#f7faf6; --surface:#ffffff; --surface2:#eef4ee; --text:#18201b; --muted:#56615a; --outline:#c4cdc5; --border:#dfe6df;
+  --primary:#2e7d4f; --on-primary:#ffffff; --pc:#c6ecd2; --on-pc:#0b3a20; --sc:#dfe8d8; --on-sc:#2a3527;
+  --error:#b3261e; --ec:#f9dedc; --on-ec:#410e0b; --warn:#8a5a00; --wc:#fbe9c4; --scrim:rgba(10,20,14,.45); --shadow:0 10px 40px rgba(20,40,28,.14);
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --page:#0d120f; --bg:#111613; --surface:#1a211c; --surface2:#222b25; --text:#e1e8e2; --muted:#a3ada6; --outline:#4a554d; --border:#2c362f;
+  --primary:#8fd7a8; --on-primary:#003920; --pc:#155232; --on-pc:#b9f0cb; --sc:#36443a; --on-sc:#d6e6d6;
+  --error:#ffb4ab; --ec:#8c1d18; --on-ec:#ffdad6; --warn:#f3c56b; --wc:#4a3a10; --scrim:rgba(0,0,0,.6); --shadow:0 10px 40px rgba(0,0,0,.5);
+  color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --page:#0d120f; --bg:#111613; --surface:#1a211c; --surface2:#222b25; --text:#e1e8e2; --muted:#a3ada6; --outline:#4a554d; --border:#2c362f;
+  --primary:#8fd7a8; --on-primary:#003920; --pc:#155232; --on-pc:#b9f0cb; --sc:#36443a; --on-sc:#d6e6d6;
+  --error:#ffb4ab; --ec:#8c1d18; --on-ec:#ffdad6; --warn:#f3c56b; --wc:#4a3a10; --scrim:rgba(0,0,0,.6); --shadow:0 10px 40px rgba(0,0,0,.5);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--page);color:var(--text);font-family:"Noto Sans","Noto Sans Bengali",system-ui,sans-serif;font-size:15px;line-height:1.45;-webkit-font-smoothing:antialiased}
+:lang(bn) body, .bn{font-family:"Noto Sans Bengali","Noto Sans",system-ui,sans-serif;line-height:1.55}
+button,input,select,textarea{font:inherit;color:inherit}
+.ms{font-family:"Material Symbols Outlined";font-weight:normal;font-style:normal;font-size:22px;line-height:1;display:inline-block;width:1em;height:1em;overflow:hidden;white-space:nowrap;direction:ltr;-webkit-font-feature-settings:"liga";font-feature-settings:"liga";flex:none;user-select:none}
+.ms.fill{font-variation-settings:"FILL" 1}
+.stage{min-height:100dvh;display:flex;flex-direction:column;align-items:center;padding:16px}
+.ribbon{max-width:412px;width:100%;display:flex;gap:8px;align-items:flex-start;font-size:12.5px;color:var(--muted);margin-bottom:10px}
+.ribbon .ms{font-size:18px;color:var(--warn)}
+.phone{position:relative;width:100%;max-width:412px;height:min(860px,calc(100dvh - 80px));min-height:560px;background:var(--bg);border-radius:28px;box-shadow:var(--shadow);border:1px solid var(--border);overflow:hidden;display:flex;flex-direction:column}
+@media (max-width:480px){.stage{padding:0}.ribbon{padding:8px 16px 0;margin-bottom:6px}.phone{border-radius:0;border-left:0;border-right:0;height:calc(100dvh - 52px);min-height:0;box-shadow:none}}
+.appbar{flex:none;height:56px;display:flex;align-items:center;gap:4px;padding:0 6px 0 4px;background:var(--bg)}
+.appbar h1{font-size:19px;font-weight:600;margin:0 0 0 8px;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.iconbtn{width:44px;height:44px;border-radius:22px;border:0;background:transparent;display:grid;place-items:center;cursor:pointer;color:var(--text)}
+.iconbtn:hover{background:var(--surface2)}
+.content{flex:1;overflow-y:auto;overflow-x:hidden;padding:4px 16px 24px;-webkit-overflow-scrolling:touch}
+.navbar{flex:none;display:flex;background:var(--surface2);border-top:1px solid var(--border);padding:8px 4px 10px}
+.navbar button{flex:1;border:0;background:transparent;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:12px;font-weight:500;cursor:pointer;color:var(--muted)}
+.navbar .pill{width:60px;height:32px;border-radius:16px;display:grid;place-items:center}
+.navbar button.on{color:var(--text)}
+.navbar button.on .pill{background:var(--pc);color:var(--on-pc)}
+h2{font-size:22px;font-weight:600;margin:8px 0 12px;line-height:1.3}
+h3{font-size:16px;font-weight:600;margin:20px 0 8px}
+p{margin:6px 0}
+.muted{color:var(--muted)}
+.small{font-size:13px}
+.italic{font-style:italic}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:14px 16px}
+.card + .card{margin-top:10px}
+.card.err{background:var(--ec);color:var(--on-ec);border-color:transparent}
+.card.tint{background:var(--surface2);border-color:transparent}
+.btn{display:flex;width:100%;min-height:48px;align-items:center;justify-content:center;gap:8px;border-radius:24px;border:1px solid var(--outline);background:transparent;font-weight:600;cursor:pointer;padding:10px 18px;color:var(--primary);text-decoration:none;text-align:center}
+.btn.filled{background:var(--primary);color:var(--on-primary);border-color:var(--primary)}
+.btn.tonal{background:var(--pc);color:var(--on-pc);border-color:transparent}
+.btn.text{border-color:transparent;width:auto;display:inline-flex;padding:8px 12px;min-height:40px}
+.btn.danger{color:var(--error);border-color:var(--error)}
+.btn[disabled]{opacity:.5;cursor:default}
+.btn + .btn{margin-top:8px}
+.row{display:flex;align-items:center;gap:10px}
+.grow{flex:1;min-width:0}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.tile{background:var(--surface);border:1px solid var(--border);border-radius:18px;min-height:112px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;cursor:pointer;font-weight:600;font-size:16px;padding:12px}
+.tile .ms{font-size:36px;color:var(--primary)}
+.tile:hover{border-color:var(--primary)}
+.list{display:flex;flex-direction:column}
+.li{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--border);cursor:pointer;background:none;border-left:0;border-right:0;border-top:0;text-align:left;width:100%}
+.li:last-child{border-bottom:0}
+.li .ms{color:var(--muted)}
+.thumb{width:48px;height:48px;border-radius:12px;flex:none;overflow:hidden;display:grid;place-items:center;font-size:26px}
+.thumb img{width:100%;height:100%;object-fit:cover}
+.photo{width:100%;height:220px;border-radius:16px;overflow:hidden;display:grid;place-items:center;font-size:96px;position:relative}
+.photo img{width:100%;height:100%;object-fit:cover}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:9px;font-size:13px;font-weight:600;white-space:nowrap}
+.chip.high{background:var(--pc);color:var(--on-pc)}
+.chip.medium{background:var(--sc);color:var(--on-sc)}
+.chip.low{background:var(--ec);color:var(--on-ec)}
+.chip.stock{background:var(--pc);color:var(--on-pc)}
+.chip.likely{background:var(--sc);color:var(--on-sc)}
+.chip.open{color:var(--primary);padding-left:0}
+.chip.closed{color:var(--muted);padding-left:0}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.fchip{border:1px solid var(--outline);background:transparent;border-radius:9px;padding:7px 14px;font-weight:500;cursor:pointer;display:inline-flex;gap:6px;align-items:center}
+.fchip.on{background:var(--sc);color:var(--on-sc);border-color:transparent}
+.fchip.on::before{content:"✓";font-weight:700}
+.note{display:flex;gap:8px;align-items:flex-start;color:var(--muted);font-size:13.5px;margin:10px 0}
+.note .ms{font-size:18px;margin-top:1px}
+.tip{display:flex;gap:12px;padding:10px 0;border-top:1px solid var(--border)}
+.tip:first-of-type{border-top:0}
+.tip b{display:block;font-size:13.5px}
+.tip .ms{color:var(--primary)}
+.badge{font-size:12px;font-weight:600;padding:2px 8px;border-radius:8px;background:var(--wc);color:var(--warn)}
+.shop{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:14px 14px 10px;margin-top:10px}
+.shop .name{font-weight:600;font-size:16px;cursor:pointer}
+.shop .acts{display:flex;gap:6px;margin-top:10px}
+.shop .acts .btn{flex:1;min-height:40px;padding:6px 8px;font-size:13.5px;margin:0}
+.radio{display:flex;align-items:center;gap:12px;padding:10px 0;cursor:pointer}
+.radio input{width:20px;height:20px;accent-color:var(--primary);margin:0}
+label.field{display:block;margin:12px 0}
+label.field span{display:block;font-size:13px;color:var(--muted);margin-bottom:4px}
+.input{width:100%;min-height:48px;border:1px solid var(--outline);border-radius:10px;background:var(--surface);padding:10px 12px}
+.input:focus{outline:2px solid var(--primary);border-color:transparent}
+.err-text{color:var(--error);font-size:13px;margin-top:4px}
+.scrim{position:absolute;inset:0;background:var(--scrim);display:flex;align-items:flex-end;z-index:20;animation:fade .15s}
+.scrim.center{align-items:center;justify-content:center;padding:24px}
+.sheet{width:100%;max-height:88%;overflow-y:auto;background:var(--surface);border-radius:24px 24px 0 0;padding:10px 16px 20px;animation:up .2s ease-out}
+.sheet .grab{width:32px;height:4px;border-radius:2px;background:var(--outline);margin:4px auto 12px}
+.dialog{width:100%;max-width:340px;background:var(--surface);border-radius:24px;padding:22px 22px 14px}
+.dialog h3{margin-top:0;font-size:19px}
+.dialog .acts{display:flex;justify-content:flex-end;gap:4px;margin-top:14px;flex-wrap:wrap}
+.snack{position:absolute;left:12px;right:12px;bottom:84px;background:#2c322e;color:#eef3ef;padding:13px 16px;border-radius:8px;z-index:30;box-shadow:var(--shadow);animation:up .2s}
+.samples{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:10px}
+.sample{border:1px solid var(--border);background:var(--surface);border-radius:14px;padding:0;cursor:pointer;overflow:hidden;text-align:left}
+.sample .art{height:78px;display:grid;place-items:center;font-size:42px}
+.sample .cap{padding:7px 9px;font-size:12.5px;line-height:1.3}
+.spinner{width:44px;height:44px;border-radius:50%;border:4px solid var(--pc);border-top-color:var(--primary);animation:spin 1s linear infinite;margin:24px auto 12px}
+.logo{width:72px;height:72px;border-radius:22px;background:var(--pc);color:var(--on-pc);display:grid;place-items:center;margin:20px 0 8px}
+.logo .ms{font-size:42px}
+.hours{width:100%;border-collapse:collapse;font-size:14px}
+.hours td{padding:5px 0;border-bottom:1px solid var(--border)}
+.hours td:last-child{text-align:right}
+.hours tr.today td{font-weight:700}
+.kv{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--border)}
+.kv .ms{color:var(--muted)}
+.mono{font-variant-numeric:tabular-nums;letter-spacing:.02em}
+.big-number{font-size:22px;font-weight:700;letter-spacing:.04em;text-align:center;padding:12px;background:var(--surface2);border-radius:12px;margin:10px 0}
+.msgbox{background:#dcf8c6;color:#111;border-radius:10px 10px 2px 10px;padding:10px 12px;margin:10px 0 10px 30px}
+hr{border:0;border-top:1px solid var(--border);margin:16px 0}
+.center{text-align:center}
+.hidden{display:none!important}
+@keyframes up{from{transform:translateY(30px);opacity:0}to{transform:none;opacity:1}}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@keyframes spin{to{transform:rotate(360deg)}}
+</style>
+
+<div class="stage">
+  <div class="ribbon" id="ribbon"></div>
+  <div class="phone" id="phone">
+    <div class="appbar" id="appbar"></div>
+    <div class="content" id="content"></div>
+    <nav class="navbar" id="navbar"></nav>
+    <div id="overlay"></div>
+    <div id="snack"></div>
+  </div>
+</div>
+<input type="file" id="fileCam" accept="image/*" capture="environment" class="hidden">
+<input type="file" id="fileGal" accept="image/*" class="hidden">
+
+<script>
+"use strict";
+const DATA = {"taxa":[{"id":1,"key":"aglaonema","kind":"plant","sci":"Aglaonema","en":"Aglaonema (Chinese evergreen)","bn":"অ্যাগলোনেমা","genus":"Aglaonema","match":["aglaonema","aglaonema commutatum","aglaonema modestum","aglaonema crispum","chinese evergreen"],"safety":"toxic_both","cat":1},{"id":2,"key":"snake_plant","kind":"plant","sci":"Dracaena trifasciata","en":"Snake plant","bn":"স্নেক প্ল্যান্ট","genus":"Dracaena","match":["dracaena trifasciata","sansevieria trifasciata","snake plant","mother-in-law's tongue"],"safety":"toxic_both","cat":1},{"id":3,"key":"money_plant","kind":"plant","sci":"Epipremnum aureum","en":"Money plant (golden pothos)","bn":"মানি প্ল্যান্ট","genus":"Epipremnum","match":["epipremnum aureum","scindapsus aureus","pothos aureus","golden pothos","money plant","devil's ivy","pothos"],"safety":"toxic_both","cat":1},{"id":4,"key":"rose","kind":"plant","sci":"Rosa","en":"Rose","bn":"গোলাপ","genus":"Rosa","match":["rosa","rosa × hybrida","rosa x hybrida","rosa hybrida","rosa chinensis","rose","garden rose"],"safety":"safe","cat":2},{"id":5,"key":"mango","kind":"plant","sci":"Mangifera indica","en":"Mango","bn":"আম","genus":"Mangifera","match":["mangifera indica","mango"],"safety":"unknown","cat":3},{"id":6,"key":"tulsi","kind":"plant","sci":"Ocimum tenuiflorum","en":"Tulsi (holy basil)","bn":"তুলসী","genus":"Ocimum","match":["ocimum tenuiflorum","ocimum sanctum","holy basil","tulsi","tulasi"],"safety":"unknown","cat":4},{"id":7,"key":"dendrobium","kind":"plant","sci":"Dendrobium","en":"Dendrobium orchid","bn":"ডেনড্রোবিয়াম অর্কিড","genus":"Dendrobium","match":["dendrobium","dendrobium nobile","dendrobium bigibbum","dendrobium orchid"],"safety":"unknown","cat":5},{"id":8,"key":"phalaenopsis","kind":"plant","sci":"Phalaenopsis","en":"Moth orchid (Phalaenopsis)","bn":"মথ অর্কিড (ফ্যালেনোপসিস)","genus":"Phalaenopsis","match":["phalaenopsis","phalaenopsis amabilis","phalaenopsis aphrodite","moth orchid"],"safety":"safe","cat":5},{"id":9,"key":"pigeon","kind":"bird","sci":"Columba livia domestica","en":"Domestic pigeon","bn":"কবুতর","genus":"Columba","match":["columba livia domestica","columba livia","domestic pigeon","pigeon","rock dove"],"safety":null,"cat":null},{"id":10,"key":"cockatiel","kind":"bird","sci":"Nymphicus hollandicus","en":"Cockatiel","bn":"ককাটিয়েল","genus":"Nymphicus","match":["nymphicus hollandicus","cockatiel"],"safety":null,"cat":null},{"id":11,"key":"lovebird","kind":"bird","sci":"Agapornis","en":"Lovebird","bn":"লাভবার্ড","genus":"Agapornis","match":["agapornis","agapornis roseicollis","agapornis fischeri","lovebird"],"safety":null,"cat":null},{"id":12,"key":"budgerigar","kind":"bird","sci":"Melopsittacus undulatus","en":"Budgerigar","bn":"বাজরিগার","genus":"Melopsittacus","match":["melopsittacus undulatus","budgerigar","budgie"],"safety":null,"cat":null},{"id":13,"key":"dog_labrador","kind":"dog","sci":"Canis familiaris","en":"Labrador Retriever","bn":"ল্যাব্রাডর রিট্রিভার","genus":"Canis","match":["labrador retriever","labrador"],"safety":null,"cat":null},{"id":14,"key":"dog_german_shepherd","kind":"dog","sci":"Canis familiaris","en":"German Shepherd","bn":"জার্মান শেফার্ড","genus":"Canis","match":["german shepherd","german shepherd dog","alsatian"],"safety":null,"cat":null},{"id":15,"key":"dog_local","kind":"dog","sci":"Canis familiaris","en":"Domestic dog (local or mixed breed)","bn":"দেশি কুকুর","genus":"Canis","match":["canis familiaris","canis lupus familiaris","mixed breed dog","local dog","indian pariah dog","dog"],"safety":null,"cat":null},{"id":16,"key":"cat_siamese","kind":"cat","sci":"Felis catus","en":"Siamese cat","bn":"সিয়ামিজ বিড়াল","genus":"Felis","match":["siamese","siamese cat"],"safety":null,"cat":null},{"id":17,"key":"cat_persian","kind":"cat","sci":"Felis catus","en":"Persian cat","bn":"পারস্য বিড়াল","genus":"Felis","match":["persian","persian cat"],"safety":null,"cat":null},{"id":18,"key":"cat_local","kind":"cat","sci":"Felis catus","en":"Domestic cat (local or mixed breed)","bn":"দেশি বিড়াল","genus":"Felis","match":["felis catus","domestic cat","domestic shorthair","domestic short-haired cat","mixed breed cat","local cat","cat"],"safety":null,"cat":null}],"cards":[{"taxon":1,"kind":null,"status":"draft","tips":[{"topic":"light","en":"Medium to bright indirect light; no direct sun on the leaves.","bn":"মাঝারি থেকে উজ্জ্বল পরোক্ষ আলো; পাতায় সরাসরি রোদ লাগাবেন না।"},{"topic":"water","en":"Keep the soil lightly moist; water when the top 2–3 cm is dry.","bn":"মাটি হালকা ভেজা রাখুন; ওপরের ২–৩ সেমি শুকালে পানি দিন।"},{"topic":"soil","en":"Well-draining potting mix rich in organic matter.","bn":"জৈব উপাদানসমৃদ্ধ, পানি নিষ্কাশন হয় এমন মাটি।"},{"topic":"temperature","en":"Dislikes cold; keep it away from air-conditioner vents.","bn":"ঠান্ডা সহ্য করতে পারে না; এসির বাতাস থেকে দূরে রাখুন।"}]},{"taxon":2,"kind":null,"status":"draft","tips":[{"topic":"light","en":"Bright, indirect light is best; it also copes with low light.","bn":"পরোক্ষ উজ্জ্বল আলো সবচেয়ে ভালো; কম আলোতেও মানিয়ে নেয়।"},{"topic":"water","en":"Water only when the soil is completely dry, roughly every 2–3 weeks and less in winter. Overwatering rots the roots.","bn":"মাটি পুরো শুকিয়ে গেলে তবেই পানি দিন, সাধারণত ২–৩ সপ্তাহে একবার, শীতে আরও কম। বেশি পানিতে শিকড় পচে যায়।"},{"topic":"soil","en":"Sandy, fast-draining mix such as cactus mix, in a pot with a drainage hole.","bn":"বালুমিশ্রিত, দ্রুত পানি নিষ্কাশন হয় এমন মাটি, যেমন ক্যাকটাস মিক্স; টবের নিচে ছিদ্র থাকতে হবে।"}]},{"taxon":3,"kind":null,"status":"draft","tips":[{"topic":"light","en":"Bright, indirect light. Copes with low light but grows slowly; keep it out of harsh afternoon sun.","bn":"উজ্জ্বল কিন্তু পরোক্ষ আলো। কম আলোতেও টিকে থাকে, তবে ধীরে বাড়ে; দুপুরের কড়া রোদ থেকে দূরে রাখুন।"},{"topic":"water","en":"Water when the top 2–3 cm of soil is dry. Do not let the pot stand in water.","bn":"মাটির ওপরের ২–৩ সেমি শুকিয়ে গেলে পানি দিন। টবের নিচে পানি জমে থাকতে দেবেন না।"},{"topic":"soil","en":"Loose, well-draining potting mix. Cuttings also grow in a jar of clean water.","bn":"ঝুরঝুরে, সহজে পানি নিষ্কাশন হয় এমন মাটি। ডাল কেটে পরিষ্কার পানির বোতলেও জন্মানো যায়।"}]},{"taxon":4,"kind":null,"status":"draft","tips":[{"topic":"light","en":"At least 6 hours of direct sun a day.","bn":"দিনে অন্তত ৬ ঘণ্টা সরাসরি রোদ।"},{"topic":"water","en":"Water deeply at the base when the topsoil is dry; keep the leaves dry.","bn":"ওপরের মাটি শুকালে গোড়ায় ভালোভাবে পানি দিন; পাতা শুকনো রাখুন।"},{"topic":"soil","en":"Rich, well-drained soil mixed with compost.","bn":"কম্পোস্ট মেশানো উর্বর, পানি নিষ্কাশন হয় এমন মাটি।"},{"topic":"fertiliser","en":"Feed during the growing season and cut off faded flowers.","bn":"বাড়ন্ত মৌসুমে সার দিন এবং শুকনো ফুল ছেঁটে ফেলুন।"}]},{"taxon":5,"kind":null,"status":"draft","tips":[{"topic":"light","en":"Full sun.","bn":"পূর্ণ রোদ।"},{"topic":"water","en":"Water young saplings regularly, letting the topsoil dry between waterings.","bn":"চারা অবস্থায় নিয়মিত পানি দিন, তবে দুবারের মাঝে ওপরের মাটি শুকাতে দিন।"},{"topic":"soil","en":"Deep, well-drained soil. In a pot, use a large and deep container.","bn":"গভীর, পানি নিষ্কাশন হয় এমন মাটি। টবে লাগালে বড় ও গভীর টব ব্যবহার করুন।"}]},{"taxon":6,"kind":null,"status":"draft","tips":[{"topic":"light","en":"Full sun to light shade, with at least 4–6 hours of sun.","bn":"পূর্ণ রোদ থেকে হালকা ছায়া; অন্তত ৪–৬ ঘণ্টা রোদ।"},{"topic":"water","en":"Water when the topsoil is dry; do not let water stand.","bn":"ওপরের মাটি শুকালে পানি দিন; পানি জমতে দেবেন না।"},{"topic":"soil","en":"Well-drained loamy soil.","bn":"পানি নিষ্কাশন হয় এমন দোআঁশ মাটি।"}]},{"taxon":7,"kind":null,"status":"draft","tips":[{"topic":"light","en":"Bright light with some direct morning sun.","bn":"উজ্জ্বল আলো, সঙ্গে সকালের কিছুটা সরাসরি রোদ।"},{"topic":"water","en":"Water when the potting medium is almost dry; more in the growing season, less in winter.","bn":"মাধ্যম প্রায় শুকালে পানি দিন; বাড়ন্ত মৌসুমে বেশি, শীতে কম।"},{"topic":"soil","en":"Coarse bark, charcoal or coconut husk chips that let air reach the roots.","bn":"মোটা ছাল, কাঠকয়লা বা নারকেলের ছোবড়ার টুকরো, যাতে শিকড়ে বাতাস পৌঁছায়।"}]},{"taxon":8,"kind":null,"status":"draft","tips":[{"topic":"light","en":"Bright, indirect light such as an east-facing window; no direct midday sun.","bn":"পরোক্ষ উজ্জ্বল আলো, যেমন পূর্বমুখী জানালা; দুপুরের সরাসরি রোদ নয়।"},{"topic":"water","en":"Water about once a week when the bark mix is nearly dry, then let it drain fully.","bn":"ছাল-মিশ্রণ প্রায় শুকিয়ে এলে মোটামুটি সপ্তাহে একবার পানি দিন, তারপর অতিরিক্ত পানি পুরো ঝরিয়ে ফেলুন।"},{"topic":"soil","en":"Orchid bark or coconut husk chips, not garden soil.","bn":"অর্কিডের ছাল বা নারকেলের ছোবড়ার টুকরো, সাধারণ মাটি নয়।"}]},{"taxon":null,"kind":"cat","status":"draft","tips":[{"topic":"food","en":"Feed a complete cat food; cats need animal protein. Keep clean water out at all times.","bn":"পূর্ণাঙ্গ বিড়ালের খাবার দিন; বিড়ালের প্রাণিজ প্রোটিন দরকার। সবসময় পরিষ্কার পানি রাখুন।"},{"topic":"space","en":"A clean litter box, a scratching post and a quiet place to hide.","bn":"পরিষ্কার লিটার বক্স, আঁচড়ানোর খুঁটি এবং লুকানোর মতো নিরিবিলি জায়গা।"},{"topic":"grooming","en":"Brush weekly; long-haired cats such as Persians need brushing every day.","bn":"সপ্তাহে একবার আঁচড়ে দিন; পারস্য বিড়ালের মতো লম্বা লোমের বিড়ালকে প্রতিদিন।"},{"topic":"vaccination","en":"Ask a vet for a vaccination and deworming schedule.","bn":"টিকা ও কৃমিনাশকের সময়সূচি পশু চিকিৎসকের কাছ থেকে জেনে নিন।"}]},{"taxon":null,"kind":"dog","status":"draft","tips":[{"topic":"food","en":"Complete dog food in measured meals and clean water at all times. Chocolate, grapes and onions are toxic to dogs.","bn":"মেপে পূর্ণাঙ্গ কুকুরের খাবার দিন, সবসময় পরিষ্কার পানি রাখুন। চকলেট, আঙুর ও পেঁয়াজ কুকুরের জন্য বিষাক্ত।"},{"topic":"exercise","en":"Daily walks and play; larger breeds need more.","bn":"প্রতিদিন হাঁটা ও খেলা; বড় জাতের কুকুরের আরও বেশি দরকার।"},{"topic":"grooming","en":"Brush regularly and check ears, nails and skin for ticks.","bn":"নিয়মিত আঁচড়ান এবং কান, নখ ও চামড়ায় এঁটুলি আছে কি না দেখুন।"},{"topic":"vaccination","en":"Rabies vaccination, and a vet's schedule for other vaccines and deworming.","bn":"জলাতঙ্কের টিকা, এবং অন্যান্য টিকা ও কৃমিনাশকের জন্য পশু চিকিৎসকের দেওয়া সময়সূচি।"}]},{"taxon":null,"kind":"bird","status":"draft","tips":[{"topic":"food","en":"A seed or pellet mix suited to the species, plus fresh greens; clean water every day.","bn":"প্রজাতি অনুযায়ী দানা বা পেলেট মিশ্রণ, সঙ্গে তাজা শাকসবজি; প্রতিদিন পরিষ্কার পানি।"},{"topic":"space","en":"A cage wide enough to fly between perches, out of direct sun and draughts.","bn":"দাঁড়ের এক পাশ থেকে আরেক পাশে উড়তে পারে এমন চওড়া খাঁচা; সরাসরি রোদ ও দমকা বাতাস থেকে দূরে।"},{"topic":"grooming","en":"Clean the cage tray every few days and offer a shallow dish of water for bathing.","bn":"কয়েক দিন পরপর খাঁচার ট্রে পরিষ্কার করুন এবং গোসলের জন্য অগভীর পানির পাত্র দিন।"}]}],"cats":[{"id":1,"slug":"indoor_foliage","en":"Indoor foliage plants","bn":"ইনডোর পাতাবাহার গাছ","kinds":["plant"],"supply":false},{"id":2,"slug":"flowering_plants","en":"Flowering plants","bn":"ফুলের গাছ","kinds":["plant"],"supply":false},{"id":3,"slug":"fruit_saplings","en":"Fruit saplings","bn":"ফলের চারা","kinds":["plant"],"supply":false},{"id":4,"slug":"herbs","en":"Herbs","bn":"ভেষজ গাছ","kinds":["plant"],"supply":false},{"id":5,"slug":"orchids","en":"Orchids","bn":"অর্কিড","kinds":["plant"],"supply":false},{"id":6,"slug":"pots","en":"Pots and planters","bn":"টব","kinds":["plant"],"supply":true},{"id":7,"slug":"potting_mix","en":"Soil and potting mix","bn":"মাটি ও পটিং মিক্স","kinds":["plant"],"supply":true},{"id":8,"slug":"fertiliser","en":"Fertiliser","bn":"সার","kinds":["plant"],"supply":true},{"id":9,"slug":"plant_tools","en":"Garden tools","bn":"বাগানের সরঞ্জাম","kinds":["plant"],"supply":true},{"id":10,"slug":"cat_food","en":"Cat food","bn":"বিড়ালের খাবার","kinds":["cat"],"supply":true},{"id":11,"slug":"litter","en":"Litter and litter boxes","bn":"লিটার ও লিটার বক্স","kinds":["cat"],"supply":true},{"id":12,"slug":"dog_food","en":"Dog food","bn":"কুকুরের খাবার","kinds":["dog"],"supply":true},{"id":13,"slug":"collars_leashes","en":"Collars and leashes","bn":"কলার ও লিশ","kinds":["dog"],"supply":true},{"id":14,"slug":"bird_food","en":"Bird food","bn":"পাখির খাবার","kinds":["bird"],"supply":true},{"id":15,"slug":"cages","en":"Cages","bn":"খাঁচা","kinds":["bird"],"supply":true},{"id":16,"slug":"bowls","en":"Bowls and feeders","bn":"খাবারের পাত্র","kinds":["cat","dog","bird"],"supply":true},{"id":17,"slug":"beds_carriers","en":"Beds and carriers","bn":"বিছানা ও ক্যারিয়ার","kinds":["cat","dog"],"supply":true},{"id":18,"slug":"grooming","en":"Grooming","bn":"গ্রুমিং সামগ্রী","kinds":["cat","dog"],"supply":true},{"id":19,"slug":"toys","en":"Toys","bn":"খেলনা","kinds":["cat","dog","bird"],"supply":true}],"items":[{"id":25,"cat":19,"en":"Scratching post","bn":"আঁচড়ানোর খুঁটি","den":null,"dbn":null,"suits":[{"taxon":null,"kind":"cat","ess":false}]},{"id":9,"cat":9,"en":"Watering can","bn":"ঝাঁঝরি","den":null,"dbn":null,"suits":[{"taxon":null,"kind":"plant","ess":false}]},{"id":10,"cat":10,"en":"Dry cat food","bn":"বিড়ালের শুকনো খাবার","den":null,"dbn":null,"suits":[{"taxon":null,"kind":"cat","ess":true}]},{"id":12,"cat":11,"en":"Cat litter","bn":"বিড়ালের লিটার","den":null,"dbn":null,"suits":[{"taxon":null,"kind":"cat","ess":true}]},{"id":13,"cat":12,"en":"Dry dog food","bn":"কুকুরের শুকনো খাবার","den":null,"dbn":null,"suits":[{"taxon":null,"kind":"dog","ess":true}]},{"id":14,"cat":13,"en":"Collar and leash","bn":"কলার ও লিশ","den":null,"dbn":null,"suits":[{"taxon":null,"kind":"dog","ess":true}]},{"id":16,"cat":14,"en":"Seed mix","bn":"দানা মিশ্রণ","den":null,"dbn":null,"suits":[{"taxon":null,"kind":"bird","ess":true}]},{"id":17,"cat":15,"en":"Bird cage","bn":"পাখির খাঁচা","den":null,"dbn":null,"suits":[{"taxon":null,"kind":"bird","ess":true}]},{"id":19,"cat":16,"en":"Food and water bowls","bn":"খাবার ও পানির পাত্র","den":null,"dbn":null,"suits":[{"taxon":null,"kind":"cat","ess":true},{"taxon":null,"kind":"dog","ess":true}]},{"id":21,"cat":17,"en":"Pet carrier","bn":"পোষা প্রাণীর ক্যারিয়ার","den":null,"dbn":null,"suits":[{"taxon":null,"kind":"cat","ess":false},{"taxon":null,"kind":"dog","ess":false}]},{"id":22,"cat":18,"en":"Grooming brush","bn":"লোম আঁচড়ানোর ব্রাশ","den":null,"dbn":null,"suits":[{"taxon":null,"kind":"cat","ess":false},{"taxon":null,"kind":"dog","ess":false},{"taxon":17,"kind":null,"ess":true}]},{"id":1,"cat":6,"en":"Pot with a drainage hole","bn":"নিচে ছিদ্রযুক্ত টব","den":null,"dbn":null,"suits":[{"taxon":null,"kind":"plant","ess":true}]},{"id":4,"cat":7,"en":"Well-draining potting mix","bn":"ঝুরঝুরে পটিং মিক্স","den":null,"dbn":null,"suits":[{"taxon":null,"kind":"plant","ess":true}]},{"id":6,"cat":8,"en":"Organic compost","bn":"জৈব কম্পোস্ট","den":null,"dbn":null,"suits":[{"taxon":null,"kind":"plant","ess":false}]},{"id":20,"cat":17,"en":"Dog bed","bn":"কুকুরের বিছানা","den":null,"dbn":null,"suits":[{"taxon":null,"kind":"dog","ess":false}]},{"id":11,"cat":11,"en":"Litter box","bn":"লিটার বক্স","den":null,"dbn":null,"suits":[{"taxon":null,"kind":"cat","ess":true}]},{"id":18,"cat":16,"en":"Seed feeder and water dispenser","bn":"দানার পাত্র ও পানির ডিসপেনসার","den":null,"dbn":null,"suits":[{"taxon":null,"kind":"bird","ess":true}]},{"id":5,"cat":8,"en":"Fertiliser for flowering plants","bn":"ফুল গাছের সার","den":null,"dbn":null,"suits":[{"taxon":4,"kind":null,"ess":true}]},{"id":24,"cat":19,"en":"Chew toy","bn":"চিবানোর খেলনা","den":null,"dbn":null,"suits":[{"taxon":null,"kind":"dog","ess":false}]},{"id":3,"cat":7,"en":"Cactus and succulent mix","bn":"ক্যাকটাস ও সাকুলেন্ট মিক্স","den":null,"dbn":null,"suits":[{"taxon":2,"kind":null,"ess":true}]},{"id":8,"cat":9,"en":"Moss pole for climbing plants","bn":"লতানো গাছের জন্য মস পোল","den":null,"dbn":null,"suits":[{"taxon":3,"kind":null,"ess":false}]},{"id":15,"cat":14,"en":"Cuttlebone (calcium)","bn":"কাটলবোন (ক্যালসিয়াম)","den":null,"dbn":null,"suits":[{"taxon":null,"kind":"bird","ess":false}]},{"id":23,"cat":19,"en":"Perches and swings","bn":"দাঁড় ও দোলনা","den":null,"dbn":null,"suits":[{"taxon":null,"kind":"bird","ess":false}]},{"id":7,"cat":9,"en":"Pruning secateurs","bn":"ডাল ছাঁটার কাঁচি","den":null,"dbn":null,"suits":[{"taxon":null,"kind":"plant","ess":false},{"taxon":4,"kind":null,"ess":true}]},{"id":2,"cat":7,"en":"Orchid bark mix","bn":"অর্কিডের ছাল-মিশ্রণ","den":null,"dbn":null,"suits":[{"taxon":8,"kind":null,"ess":true},{"taxon":7,"kind":null,"ess":true}]}],"shops":[{"id":"00000000-0000-4000-8000-000000000001","en":"Demo Green Nursery","bn":"ডেমো গ্রিন নার্সারি","type":"nursery","lat":22.3596,"lng":91.8215,"aen":"Demo address 1","abn":null,"area":"GEC","phone":"+8801700000001","wa":"+8801700000001","hours":{"fri":[["15:00","21:00"]],"mon":[["09:00","21:00"]],"sat":[["09:00","21:00"]],"sun":[["09:00","21:00"]],"thu":[["09:00","21:00"]],"tue":[["09:00","21:00"]],"wed":[["09:00","21:00"]]},"rating":4.5,"rc":12,"partner":true,"cats":[1,2,4,6,7,8],"stock":[{"taxon":3,"item":null,"price":250}]},{"id":"00000000-0000-4000-8000-000000000002","en":"Demo Orchid House","bn":"ডেমো অর্কিড হাউস","type":"nursery","lat":22.365,"lng":91.83,"aen":"Demo address 2","abn":null,"area":"Nasirabad","phone":"+8801700000002","wa":null,"hours":{"mon":[["10:00","20:00"]],"sat":[["10:00","20:00"]],"sun":[["10:00","20:00"]],"thu":[["10:00","20:00"]],"tue":[["10:00","20:00"]],"wed":[["10:00","20:00"]]},"rating":null,"rc":0,"partner":false,"cats":[5,7],"stock":null},{"id":"00000000-0000-4000-8000-000000000003","en":"Demo Fruit Sapling Centre","bn":"ডেমো ফলের চারা কেন্দ্র","type":"nursery","lat":22.34,"lng":91.8,"aen":"Demo address 3","abn":null,"area":"Agrabad","phone":"+8801700000003","wa":"+8801700000003","hours":null,"rating":null,"rc":0,"partner":false,"cats":[3,8],"stock":null},{"id":"00000000-0000-4000-8000-000000000004","en":"Demo Pet Corner","bn":"ডেমো পেট কর্নার","type":"pet_shop","lat":22.358,"lng":91.823,"aen":"Demo address 4","abn":null,"area":"GEC","phone":"+8801700000004","wa":"+8801700000004","hours":{"fri":[["16:00","22:00"]],"mon":[["10:00","22:00"]],"sat":[["10:00","22:00"]],"sun":[["10:00","22:00"]],"thu":[["10:00","22:00"]],"tue":[["10:00","22:00"]],"wed":[["10:00","22:00"]]},"rating":4.2,"rc":30,"partner":false,"cats":[10,11,12,16,19],"stock":null},{"id":"00000000-0000-4000-8000-000000000005","en":"Demo Bird and Aquarium","bn":"ডেমো পাখি ও অ্যাকোয়ারিয়াম","type":"pet_shop","lat":22.37,"lng":91.835,"aen":"Demo address 5","abn":null,"area":"Muradpur","phone":"+8801700000005","wa":"+8801700000005","hours":null,"rating":null,"rc":0,"partner":false,"cats":[14,15],"stock":null},{"id":"00000000-0000-4000-8000-000000000006","en":"Demo Vet Supplies","bn":"ডেমো ভেট সাপ্লাইজ","type":"vet_supply","lat":22.355,"lng":91.818,"aen":"Demo address 6","abn":null,"area":"Lalkhan Bazar","phone":"+8801700000006","wa":null,"hours":null,"rating":null,"rc":0,"partner":false,"cats":[10,12,18],"stock":null},{"id":"00000000-0000-4000-8000-000000000007","en":"Demo Animal Clinic","bn":"ডেমো পশু ক্লিনিক","type":"vet_clinic","lat":22.362,"lng":91.825,"aen":"Demo address 7","abn":null,"area":"GEC","phone":"+8801700000007","wa":"+8801700000007","hours":{"mon":[["09:00","13:00"],["17:00","21:00"]],"sat":[["09:00","13:00"],["17:00","21:00"]],"sun":[["09:00","13:00"],["17:00","21:00"]],"thu":[["09:00","13:00"],["17:00","21:00"]],"tue":[["09:00","13:00"],["17:00","21:00"]],"wed":[["09:00","13:00"],["17:00","21:00"]]},"rating":null,"rc":0,"partner":false,"cats":null,"stock":null}]};
+const L = {"en":{"appTitle":"HobbyLens","welcomeTitle":"Identify plants and pets","welcomeBody":"Take a photo to find out what it is, how to care for it, and where to buy what you need nearby.","chooseLanguage":"Choose your language","disclaimerTitle":"Before you start","disclaimerBody":"Identification can be wrong. Care tips are general guidance, not expert advice. For any health problem in a pet, please consult a veterinarian.","getStarted":"Get started","notConfigured":"This build is missing its server settings. Rebuild with SUPABASE_URL and SUPABASE_PUBLISHABLE_KEY.","navIdentify":"Identify","navCollection":"My Collection","navSettings":"Settings","homeTitle":"What would you like to identify?","categoryPlant":"Plant","categoryCat":"Cat","categoryDog":"Dog","categoryBird":"Bird","categoryAuto":"Detect automatically","recentIdentifications":"Recent","takePhoto":"Take a photo","chooseFromGallery":"Choose from gallery","photoTipsTitle":"For the best result","photoTipPlant":"One plant in the frame, with a leaf or flower in sharp focus, in daylight.","photoTipAnimal":"The whole animal, facing the camera, in good light.","notPlantOrPetTitle":"This doesn't look like a plant or pet","notPlantOrPetBody":"Identify it anyway, or take another photo?","identifyAnyway":"Identify anyway","identifying":"Identifying…","slowNetwork":"This is taking longer than usual. The network may be slow.","errorNoInternet":"No internet connection. Check your connection and try again.","errorServer":"Something went wrong on our side. Please try again.","errorTimeout":"That took too long. Please try again.","errorQuota":"You have reached today's limit of {limit} identifications. Please try again tomorrow.","errorPhoto":"This photo could not be used. Please try another.","tryAgain":"Try again","resultTitle":"Result","confidencePercent":"{percent} match","bandHigh":"High confidence","bandMedium":"Medium confidence","bandLow":"Low confidence","otherPossibilities":"Other possibilities","careBasics":"Care basics","careDraft":"Draft tips, not yet checked by an expert.","careAiGenerated":"Written by AI and not checked by an expert.","careGeneral":"General tips for this kind of animal.","careNone":"No care tips for this one yet.","loadCareTips":"Show care tips","topicLight":"Light","topicWater":"Water","topicSoil":"Soil","topicTemperature":"Temperature","topicFertiliser":"Fertiliser","topicFood":"Food","topicSpace":"Space","topicGrooming":"Grooming","topicExercise":"Exercise","topicVaccination":"Vaccination","petSafeSafe":"Not known to be toxic to cats and dogs","petSafeToxicBoth":"Toxic to cats and dogs","petSafeToxicCats":"Toxic to cats","petSafeToxicDogs":"Toxic to dogs","petSafeUnknown":"Safety around pets not confirmed","whereToBuy":"Where to buy near me","whereToBuySupplies":"Pet shops near me","whatYouNeed":"What you'll need","saveToCollection":"Save to My Collection","savedToCollection":"Saved to My Collection","notRight":"Not right?","resultDisclaimer":"Identification can be wrong. Tips are general guidance.","vetAdviceTitle":"Health worry?","vetAdviceBody":"We can't assess health from a photo. Please consult a veterinarian.","findVet":"Find a vet nearby","detectedDifferent":"This looks like a {kind}, so we identified it as one.","lowConfidenceTitle":"We're not sure about this one","lowConfidenceBody":"Even the best match is below 60%, so we won't present it as certain. Try another photo or a different angle.","possibleMatches":"Possible, not confirmed","retakePhoto":"Take another photo","notRecognisedTitle":"We couldn't recognise this photo","notRecognisedBody":"Make sure the photo shows one plant, cat, dog or bird clearly, in good light.","retakeTips":"Move closer, avoid blur, and include a leaf or the animal's face.","locationWhyTitle":"Find shops near you","locationWhyBody":"We use your location only now, to find nearby shops. It is not stored or shared with shops.","allowLocation":"Use my location","locationDenied":"Location permission is off. You can turn it on in your phone settings.","locationServiceOff":"Turn on location (GPS) on your phone to search nearby.","locationUnavailable":"We couldn't get your location. Move to an open area and try again.","openSettings":"Open settings","radiusKm":"{km} km","noShopsFound":"No shops found within {km} km. Try a wider area.","shopNursery":"Nursery","shopPetShop":"Pet shop","shopVetSupply":"Vet supply store","shopVetClinic":"Vet clinic","distanceKm":"{distance} km away","distanceM":"{distance} m away","openNow":"Open now","closedNow":"Closed now","hoursUnknown":"Hours not known","inStockBadge":"Has this in stock","likelyAvailable":"Likely available, call to confirm","verifiedShop":"Verified","ratingLabel":"Rated {rating} from {count} reviews","callShop":"Call","whatsappShop":"WhatsApp","directions":"Directions","couldNotOpen":"Could not open this on your phone.","whatsappAskItem":"Hello, I found your shop on HobbyLens. Do you have {item}?","whatsappHello":"Hello, I found your shop on HobbyLens.","shopAddress":"Address","openingHours":"Opening hours","closedDay":"Closed","essential":"Essential","niceToHave":"Nice to have","priceRange":"৳{min} to ৳{max}","priceFrom":"From ৳{min}","priceAskShop":"Ask the shop for the price","accessoriesEmpty":"No accessories listed yet.","collectionEmpty":"Nothing saved yet. Identify a plant or pet and tap Save.","nickname":"Name","nicknameHint":"For example, balcony money plant","reminders":"Reminders","addReminder":"Add reminder","noReminders":"No reminders yet.","reminderWater":"Water","reminderFertilise":"Fertilise","reminderFeed":"Feed","reminderGroom":"Groom","reminderVaccinate":"Vaccination","reminderCustom":"Other","reminderLabel":"Note (optional)","reminderRepeat":"Repeat","reminderOnce":"Once","everyNDays":"{days, plural, =1{Every day} other{Every {days} days}}","reminderNext":"Next: {date}","reminderDate":"Date","reminderTime":"Time","reminderInPast":"Choose a time later than now.","markDone":"Done","notificationBody":"Tap to open HobbyLens.","notificationsOff":"Notifications are off, so reminders can't reach you. Turn them on in your phone settings.","save":"Save","cancel":"Cancel","delete":"Delete","deleteItemConfirm":"Delete this from My Collection? Its reminders will be deleted too.","signInTitle":"Verify your phone to save","signInBody":"We'll send a code by SMS. Your number is used only to keep your collection safe.","phoneLabel":"Mobile number","phoneHint":"01XXXXXXXXX","phoneInvalid":"Enter a valid Bangladeshi mobile number.","sendCode":"Send code","codeLabel":"Code from SMS","verify":"Verify","codeInvalid":"That code didn't work. Check it or ask for a new one.","resendCode":"Send a new code","resendIn":"New code in {seconds} s","phoneExistsSwitch":"This number already has an account. We'll sign you in to it.","vetHelpTitle":"Please consult a veterinarian","vetHelpBody":"HobbyLens can't diagnose illness. If your pet seems unwell, contact a vet as soon as possible.","vetClinicsNearby":"Vet clinics near you","reportTitle":"What's wrong?","reportWrongMatch":"It's a different plant or animal","reportNotPlantOrPet":"It's not a plant or pet","reportOther":"Something else","reportSuggestedName":"What is it? (optional)","reportNote":"Anything else? (optional)","reportSend":"Send","reportThanks":"Thank you. We review every report.","settingsLanguage":"Language","languageBangla":"বাংলা","languageEnglish":"English","settingsAccount":"Account","signedInAs":"Signed in as {phone}","guestAccount":"Guest. Verify your phone to save to My Collection.","verifyPhone":"Verify phone","signOut":"Sign out","signOutUnsynced":"Some changes haven't synced yet. Connect to the internet before signing out, or they will be lost.","signOutAnyway":"Sign out anyway","deleteAccount":"Delete account and all data","deleteAccountConfirm":"This permanently deletes your account, collection, reminders and photos. It cannot be undone.","accountDeleted":"Your account and data have been deleted.","settingsPrivacy":"Privacy","privacySummary":"Photos you don't save are deleted within 24 hours. Your location is used only while you search for shops and is never stored. Nothing is shared with shops unless you call or message them.","settingsAbout":"About and disclaimer"},"bn":{"appTitle":"HobbyLens","welcomeTitle":"গাছ ও পোষা প্রাণী চিনুন","welcomeBody":"ছবি তুলে জেনে নিন এটি কী, কীভাবে যত্ন নেবেন এবং কাছাকাছি কোথায় প্রয়োজনীয় জিনিস কিনবেন।","chooseLanguage":"ভাষা বেছে নিন","disclaimerTitle":"শুরু করার আগে","disclaimerBody":"শনাক্তকরণ ভুল হতে পারে। যত্নের পরামর্শগুলো সাধারণ নির্দেশনা, বিশেষজ্ঞের পরামর্শ নয়। পোষা প্রাণীর যেকোনো স্বাস্থ্য সমস্যায় পশু চিকিৎসকের পরামর্শ নিন।","getStarted":"শুরু করুন","notConfigured":"এই বিল্ডে সার্ভারের সেটিংস নেই। SUPABASE_URL ও SUPABASE_PUBLISHABLE_KEY দিয়ে আবার বিল্ড করুন।","navIdentify":"শনাক্ত","navCollection":"আমার সংগ্রহ","navSettings":"সেটিংস","homeTitle":"কী চিনতে চান?","categoryPlant":"গাছ","categoryCat":"বিড়াল","categoryDog":"কুকুর","categoryBird":"পাখি","categoryAuto":"নিজে থেকে শনাক্ত করুন","recentIdentifications":"সাম্প্রতিক","takePhoto":"ছবি তুলুন","chooseFromGallery":"গ্যালারি থেকে বেছে নিন","photoTipsTitle":"ভালো ফলাফলের জন্য","photoTipPlant":"ফ্রেমে একটি গাছ রাখুন, পাতা বা ফুল যেন পরিষ্কার দেখা যায়, দিনের আলোতে তুলুন।","photoTipAnimal":"পুরো প্রাণীটি ক্যামেরার দিকে মুখ করে, ভালো আলোতে।","notPlantOrPetTitle":"এটি গাছ বা পোষা প্রাণী মনে হচ্ছে না","notPlantOrPetBody":"তবুও শনাক্ত করবেন, নাকি আরেকটি ছবি তুলবেন?","identifyAnyway":"তবুও শনাক্ত করুন","identifying":"শনাক্ত করা হচ্ছে…","slowNetwork":"স্বাভাবিকের চেয়ে বেশি সময় লাগছে। নেটওয়ার্ক ধীর হতে পারে।","errorNoInternet":"ইন্টারনেট সংযোগ নেই। সংযোগ দেখে আবার চেষ্টা করুন।","errorServer":"আমাদের দিক থেকে সমস্যা হয়েছে। আবার চেষ্টা করুন।","errorTimeout":"অনেক সময় লেগেছে। আবার চেষ্টা করুন।","errorQuota":"আজকের {limit}টি শনাক্তকরণের সীমা শেষ। আগামীকাল আবার চেষ্টা করুন।","errorPhoto":"ছবিটি ব্যবহার করা যায়নি। অন্য ছবি দিয়ে চেষ্টা করুন।","tryAgain":"আবার চেষ্টা করুন","resultTitle":"ফলাফল","confidencePercent":"{percent} মিল","bandHigh":"উচ্চ নিশ্চয়তা","bandMedium":"মাঝারি নিশ্চয়তা","bandLow":"কম নিশ্চয়তা","otherPossibilities":"অন্যান্য সম্ভাবনা","careBasics":"যত্নের মূল বিষয়","careDraft":"খসড়া পরামর্শ, এখনো বিশেষজ্ঞ যাচাই করেননি।","careAiGenerated":"এআই দিয়ে লেখা, বিশেষজ্ঞ যাচাই করেননি।","careGeneral":"এই ধরনের প্রাণীর জন্য সাধারণ পরামর্শ।","careNone":"এটির জন্য এখনো যত্নের পরামর্শ নেই।","loadCareTips":"যত্নের পরামর্শ দেখুন","topicLight":"আলো","topicWater":"পানি","topicSoil":"মাটি","topicTemperature":"তাপমাত্রা","topicFertiliser":"সার","topicFood":"খাবার","topicSpace":"থাকার জায়গা","topicGrooming":"পরিচর্যা","topicExercise":"ব্যায়াম","topicVaccination":"টিকা","petSafeSafe":"বিড়াল ও কুকুরের জন্য বিষাক্ত বলে জানা নেই","petSafeToxicBoth":"বিড়াল ও কুকুরের জন্য বিষাক্ত","petSafeToxicCats":"বিড়ালের জন্য বিষাক্ত","petSafeToxicDogs":"কুকুরের জন্য বিষাক্ত","petSafeUnknown":"পোষা প্রাণীর জন্য নিরাপদ কি না নিশ্চিত নয়","whereToBuy":"কাছাকাছি কোথায় কিনবেন","whereToBuySupplies":"কাছাকাছি পেট শপ","whatYouNeed":"যা যা লাগবে","saveToCollection":"আমার সংগ্রহে রাখুন","savedToCollection":"আমার সংগ্রহে রাখা হয়েছে","notRight":"ভুল হয়েছে?","resultDisclaimer":"শনাক্তকরণ ভুল হতে পারে। পরামর্শগুলো সাধারণ নির্দেশনা।","vetAdviceTitle":"স্বাস্থ্য নিয়ে চিন্তা?","vetAdviceBody":"ছবি দেখে স্বাস্থ্য বোঝা সম্ভব নয়। পশু চিকিৎসকের পরামর্শ নিন।","findVet":"কাছাকাছি পশু চিকিৎসক খুঁজুন","detectedDifferent":"এটি {kind} মনে হচ্ছে, তাই সেভাবেই শনাক্ত করা হয়েছে।","lowConfidenceTitle":"এটি নিয়ে আমরা নিশ্চিত নই","lowConfidenceBody":"সবচেয়ে কাছের মিলটিও ৬০%-এর নিচে, তাই এটিকে নিশ্চিত বলছি না। অন্য ছবি বা অন্য দিক থেকে তুলে চেষ্টা করুন।","possibleMatches":"সম্ভাব্য, নিশ্চিত নয়","retakePhoto":"আরেকটি ছবি তুলুন","notRecognisedTitle":"ছবিটি চেনা যায়নি","notRecognisedBody":"ছবিতে যেন একটি গাছ, বিড়াল, কুকুর বা পাখি ভালো আলোতে পরিষ্কার দেখা যায়।","retakeTips":"কাছে যান, ছবি যেন ঝাপসা না হয়, আর পাতা বা প্রাণীর মুখ যেন দেখা যায়।","locationWhyTitle":"আপনার কাছের দোকান খুঁজুন","locationWhyBody":"কাছের দোকান খুঁজতে শুধু এখন আপনার অবস্থান ব্যবহার করা হবে। এটি সংরক্ষণ করা হয় না বা দোকানের সঙ্গে শেয়ার করা হয় না।","allowLocation":"আমার অবস্থান ব্যবহার করুন","locationDenied":"অবস্থানের অনুমতি বন্ধ আছে। ফোনের সেটিংস থেকে চালু করতে পারেন।","locationServiceOff":"কাছাকাছি খুঁজতে ফোনের লোকেশন (জিপিএস) চালু করুন।","locationUnavailable":"আপনার অবস্থান পাওয়া যায়নি। খোলা জায়গায় গিয়ে আবার চেষ্টা করুন।","openSettings":"সেটিংস খুলুন","radiusKm":"{km} কিমি","noShopsFound":"{km} কিমির মধ্যে কোনো দোকান পাওয়া যায়নি। আরও বড় এলাকা বেছে নিন।","shopNursery":"নার্সারি","shopPetShop":"পেট শপ","shopVetSupply":"পশু চিকিৎসা সামগ্রীর দোকান","shopVetClinic":"পশু চিকিৎসা কেন্দ্র","distanceKm":"{distance} কিমি দূরে","distanceM":"{distance} মিটার দূরে","openNow":"এখন খোলা","closedNow":"এখন বন্ধ","hoursUnknown":"খোলার সময় জানা নেই","inStockBadge":"এটি স্টকে আছে","likelyAvailable":"সম্ভবত পাওয়া যাবে, ফোন করে নিশ্চিত হোন","verifiedShop":"যাচাইকৃত","ratingLabel":"{count}টি রিভিউতে রেটিং {rating}","callShop":"কল","whatsappShop":"হোয়াটসঅ্যাপ","directions":"পথ নির্দেশনা","couldNotOpen":"আপনার ফোনে এটি খোলা যায়নি।","whatsappAskItem":"হ্যালো, HobbyLens-এ আপনার দোকানের খোঁজ পেয়েছি। আপনার কাছে কি {item} আছে?","whatsappHello":"হ্যালো, HobbyLens-এ আপনার দোকানের খোঁজ পেয়েছি।","shopAddress":"ঠিকানা","openingHours":"খোলার সময়","closedDay":"বন্ধ","essential":"অপরিহার্য","niceToHave":"থাকলে ভালো","priceRange":"৳{min} থেকে ৳{max}","priceFrom":"৳{min} থেকে শুরু","priceAskShop":"দামের জন্য দোকানে জিজ্ঞেস করুন","accessoriesEmpty":"এখনো কোনো সামগ্রীর তালিকা নেই।","collectionEmpty":"এখনো কিছু রাখা হয়নি। গাছ বা পোষা প্রাণী শনাক্ত করে \"রাখুন\" চাপুন।","nickname":"নাম","nicknameHint":"যেমন, বারান্দার মানি প্ল্যান্ট","reminders":"রিমাইন্ডার","addReminder":"রিমাইন্ডার যোগ করুন","noReminders":"এখনো কোনো রিমাইন্ডার নেই।","reminderWater":"পানি দেওয়া","reminderFertilise":"সার দেওয়া","reminderFeed":"খাওয়ানো","reminderGroom":"পরিচর্যা","reminderVaccinate":"টিকা","reminderCustom":"অন্যান্য","reminderLabel":"নোট (ঐচ্ছিক)","reminderRepeat":"পুনরাবৃত্তি","reminderOnce":"একবার","everyNDays":"{days, plural, =1{প্রতিদিন} other{প্রতি {days} দিন পরপর}}","reminderNext":"পরবর্তী: {date}","reminderDate":"তারিখ","reminderTime":"সময়","reminderInPast":"এখনকার পরের একটি সময় বেছে নিন।","markDone":"সম্পন্ন","notificationBody":"HobbyLens খুলতে ট্যাপ করুন।","notificationsOff":"নোটিফিকেশন বন্ধ, তাই রিমাইন্ডার পৌঁছাবে না। ফোনের সেটিংস থেকে চালু করুন।","save":"সংরক্ষণ","cancel":"বাতিল","delete":"মুছুন","deleteItemConfirm":"আমার সংগ্রহ থেকে এটি মুছবেন? এর রিমাইন্ডারগুলোও মুছে যাবে।","signInTitle":"সংরক্ষণ করতে ফোন নম্বর যাচাই করুন","signInBody":"এসএমএসে একটি কোড পাঠানো হবে। আপনার নম্বর শুধু আপনার সংগ্রহ সুরক্ষিত রাখতে ব্যবহার হবে।","phoneLabel":"মোবাইল নম্বর","phoneHint":"০১XXXXXXXXX","phoneInvalid":"সঠিক বাংলাদেশি মোবাইল নম্বর দিন।","sendCode":"কোড পাঠান","codeLabel":"এসএমএসের কোড","verify":"যাচাই করুন","codeInvalid":"কোডটি কাজ করেনি। আবার দেখুন বা নতুন কোড চান।","resendCode":"নতুন কোড পাঠান","resendIn":"{seconds} সেকেন্ড পর নতুন কোড","phoneExistsSwitch":"এই নম্বরে আগে থেকেই অ্যাকাউন্ট আছে। সেটিতেই সাইন ইন করানো হবে।","vetHelpTitle":"পশু চিকিৎসকের পরামর্শ নিন","vetHelpBody":"HobbyLens রোগ নির্ণয় করতে পারে না। পোষা প্রাণী অসুস্থ মনে হলে যত দ্রুত সম্ভব পশু চিকিৎসকের সঙ্গে যোগাযোগ করুন।","vetClinicsNearby":"কাছের পশু চিকিৎসা কেন্দ্র","reportTitle":"কী ভুল হয়েছে?","reportWrongMatch":"এটি অন্য গাছ বা প্রাণী","reportNotPlantOrPet":"এটি গাছ বা পোষা প্রাণী নয়","reportOther":"অন্য কিছু","reportSuggestedName":"এটি আসলে কী? (ঐচ্ছিক)","reportNote":"আর কিছু? (ঐচ্ছিক)","reportSend":"পাঠান","reportThanks":"ধন্যবাদ। আমরা প্রতিটি রিপোর্ট পর্যালোচনা করি।","settingsLanguage":"ভাষা","languageBangla":"বাংলা","languageEnglish":"English","settingsAccount":"অ্যাকাউন্ট","signedInAs":"{phone} নম্বরে সাইন ইন করা","guestAccount":"অতিথি। আমার সংগ্রহে রাখতে ফোন যাচাই করুন।","verifyPhone":"ফোন যাচাই করুন","signOut":"সাইন আউট","signOutUnsynced":"কিছু পরিবর্তন এখনো সিঙ্ক হয়নি। সাইন আউটের আগে ইন্টারনেটে সংযুক্ত হোন, নইলে সেগুলো হারিয়ে যাবে।","signOutAnyway":"তবুও সাইন আউট করুন","deleteAccount":"অ্যাকাউন্ট ও সব তথ্য মুছুন","deleteAccountConfirm":"এতে আপনার অ্যাকাউন্ট, সংগ্রহ, রিমাইন্ডার ও ছবি স্থায়ীভাবে মুছে যাবে। এটি আর ফেরানো যাবে না।","accountDeleted":"আপনার অ্যাকাউন্ট ও তথ্য মুছে ফেলা হয়েছে।","settingsPrivacy":"গোপনীয়তা","privacySummary":"যে ছবি রাখেন না, তা ২৪ ঘণ্টার মধ্যে মুছে ফেলা হয়। শুধু দোকান খোঁজার সময় অবস্থান ব্যবহার হয়, কখনো সংরক্ষণ করা হয় না। আপনি নিজে কল বা মেসেজ না করলে দোকানের সঙ্গে কিছুই শেয়ার করা হয় না।","settingsAbout":"অ্যাপ সম্পর্কে ও সতর্কতা"}};
+
+/* Preview-only text (not part of the app). */
+const PV = {
+  en: {
+    ribbon: "Preview of the HobbyLens app with demo data. Shops, phone numbers and the location are made up; nothing is sent to a server.",
+    trySample: "Or try a sample photo",
+    liveNote: "In this preview, your own photo is identified live by Claude, on your Claude account. The app itself uses Plant.id or Gemini through its server.",
+    noLiveTitle: "Live identification isn't available here",
+    noLiveBody: "Choose which kind of result to see for your photo:",
+    outConfident: "Confident match", outLow: "Not sure", outVet: "Pet with a health worry", outNone: "Not recognised",
+    demoLocation: "Demo location: GEC Circle, Chattogram",
+    callDemo: "In the app, this opens your phone's dialler with this number:",
+    waDemo: "In the app, this opens WhatsApp to {phone} with this message:",
+    demoCode: "Demo: any 6 digits work as the code.",
+    reminderPreview: "In this preview, reminders are listed but no notification is sent.",
+    close: "Close",
+    shopStockPrice: "৳{price} at this shop",
+    aiCaring: "Writing care tips…",
+  },
+  bn: {
+    ribbon: "ডেমো ডেটা দিয়ে HobbyLens অ্যাপের প্রিভিউ। দোকান, ফোন নম্বর ও অবস্থান কাল্পনিক; কোনো সার্ভারে কিছু পাঠানো হয় না।",
+    trySample: "অথবা একটি নমুনা ছবি দিয়ে দেখুন",
+    liveNote: "এই প্রিভিউতে আপনার নিজের ছবি Claude সরাসরি শনাক্ত করে, আপনার Claude অ্যাকাউন্ট দিয়ে। আসল অ্যাপ সার্ভারের মাধ্যমে Plant.id বা Gemini ব্যবহার করে।",
+    noLiveTitle: "এখানে সরাসরি শনাক্তকরণ চালু নেই",
+    noLiveBody: "আপনার ছবির জন্য কোন ধরনের ফলাফল দেখতে চান, বেছে নিন:",
+    outConfident: "নিশ্চিত মিল", outLow: "নিশ্চিত নয়", outVet: "স্বাস্থ্য নিয়ে চিন্তার পোষা প্রাণী", outNone: "চেনা যায়নি",
+    demoLocation: "ডেমো অবস্থান: জিইসি মোড়, চট্টগ্রাম",
+    callDemo: "অ্যাপে এটি এই নম্বরসহ আপনার ফোনের ডায়ালার খুলবে:",
+    waDemo: "অ্যাপে এটি {phone} নম্বরে এই বার্তাসহ হোয়াটসঅ্যাপ খুলবে:",
+    demoCode: "ডেমো: কোড হিসেবে যেকোনো ৬টি সংখ্যা দিন।",
+    reminderPreview: "এই প্রিভিউতে রিমাইন্ডার তালিকায় দেখায়, তবে কোনো নোটিফিকেশন পাঠানো হয় না।",
+    close: "বন্ধ করুন",
+    shopStockPrice: "এই দোকানে ৳{price}",
+    aiCaring: "যত্নের পরামর্শ লেখা হচ্ছে…",
+  },
+};
+
+const SAMPLES = [
+  {id:"money", cat:"plant", emoji:"🪴", bg:"linear-gradient(135deg,#d7f0dc,#8cc9a0)", en:"Money plant on a balcony", bn:"বারান্দার মানি প্ল্যান্ট",
+   out:{status:"confident", detected:"plant", matches:[["money_plant",.91],[{sci:"Philodendron hederaceum",en:"Heartleaf philodendron",kind:"plant"},.05],["aglaonema",.02]]}},
+  {id:"rose", cat:"plant", emoji:"🌹", bg:"linear-gradient(135deg,#fde2e4,#f4a6b0)", en:"Rose in a pot", bn:"টবে গোলাপ",
+   out:{status:"confident", detected:"plant", matches:[["rose",.86],[{sci:"Rosa chinensis",en:"China rose",kind:"plant"},.08]]}},
+  {id:"leaf", cat:"plant", emoji:"🌿", bg:"linear-gradient(135deg,#e3eadf,#a9b8a2)", en:"Blurry leaf close-up", bn:"ঝাপসা পাতার ছবি",
+   out:{status:"low_confidence", detected:"plant", matches:[["aglaonema",.42],[{sci:"Dieffenbachia seguine",en:"Dumb cane",kind:"plant"},.31]]}},
+  {id:"cat", cat:"cat", emoji:"🐈", bg:"linear-gradient(135deg,#f3e6d6,#d9b48c)", en:"Long-haired cat with a runny eye", bn:"চোখে পানি পড়া লম্বা লোমের বিড়াল",
+   out:{status:"confident", detected:"cat", vet:true, matches:[["cat_persian","high"],["cat_local","low"]]}},
+  {id:"dog", cat:"dog", emoji:"🐕", bg:"linear-gradient(135deg,#efe6d8,#c9a77c)", en:"Adopted street dog", bn:"দত্তক নেওয়া দেশি কুকুর",
+   out:{status:"confident", detected:"dog", matches:[["dog_local","high"],["dog_labrador","low"]]}},
+  {id:"budgie", cat:"bird", emoji:"🦜", bg:"linear-gradient(135deg,#e2f4d8,#9fd3e6)", en:"Budgie in a cage", bn:"খাঁচায় বাজরিগার",
+   out:{status:"confident", detected:"bird", matches:[["budgerigar","high"],["lovebird","low"]]}},
+  {id:"blur", cat:"auto", emoji:"📷", bg:"linear-gradient(135deg,#d9dde0,#8d969c)", en:"Dark, blurry photo", bn:"অন্ধকার, ঝাপসা ছবি",
+   out:{status:"not_recognised", detected:null, matches:[]}},
+];
+const OUTCOMES = {confident:"money", low:"leaf", vet:"cat", none:"blur"};
+
+/* ---------- storage (best effort) ---------- */
+const store = {
+  get(k, d){ try{ const v = localStorage.getItem("hobbylens." + k); return v == null ? d : JSON.parse(v); }catch(e){ return d; } },
+  set(k, v){ try{ localStorage.setItem("hobbylens." + k, JSON.stringify(v)); }catch(e){} },
+  del(k){ try{ localStorage.removeItem("hobbylens." + k); }catch(e){} },
+};
+
+const S = {
+  lang: store.get("lang", "bn"),
+  onboarded: store.get("onboarded", false),
+  tab: "identify",
+  stack: [],
+  recent: store.get("recent", []),
+  collection: store.get("collection", []),
+  phone: store.get("phone", null),
+  located: false,
+  overlay: null,
+  pendingSave: null,
+  live: null,            // sample namespace when available
+  liveImages: false,
+  liveBlocked: false,
+};
+const persist = () => { store.set("recent", S.recent.slice(0, 8)); store.set("collection", S.collection); store.set("phone", S.phone); store.set("lang", S.lang); store.set("onboarded", S.onboarded); };
+
+/* ---------- text ---------- */
+function esc(s){ return String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+function t(key, params){
+  let s = (L[S.lang] && L[S.lang][key]) ?? L.en[key] ?? PV[S.lang][key] ?? PV.en[key] ?? key;
+  if (key === "everyNDays") {
+    const m = s.match(/=1\{([^}]*)\}\s*other\{(.*)\}\s*\}$/);
+    if (m) s = params.days === 1 ? m[1] : m[2];
+  }
+  if (params) for (const [k, v] of Object.entries(params)) s = s.split("{" + k + "}").join(v);
+  return s;
+}
+const T = (k, p) => esc(t(k, p));
+const loc = () => S.lang === "bn" ? "bn-BD" : "en-GB";
+const num = (n, d = 0) => new Intl.NumberFormat(loc(), {minimumFractionDigits:d, maximumFractionDigits:d}).format(n);
+const pct = f => new Intl.NumberFormat(loc(), {style:"percent", maximumFractionDigits:0}).format(f);
+const fmtDate = d => new Intl.DateTimeFormat(loc(), {day:"numeric", month:"short", year:"numeric"}).format(d);
+const fmtTime = d => new Intl.DateTimeFormat(loc(), {hour:"numeric", minute:"2-digit"}).format(d);
+const icon = (n, cls = "") => `<span class="ms ${cls}" aria-hidden="true">${n}</span>`;
+const nameOf = o => (S.lang === "bn" && o.bn) ? o.bn : o.en;
+
+/* ---------- data helpers ---------- */
+const taxaByKey = Object.fromEntries(DATA.taxa.map(x => [x.key, x]));
+const taxaById = Object.fromEntries(DATA.taxa.map(x => [x.id, x]));
+const catsById = Object.fromEntries(DATA.cats.map(c => [c.id, c]));
+const isAnimal = k => k === "cat" || k === "dog" || k === "bird";
+const kindLabel = k => t({plant:"categoryPlant", cat:"categoryCat", dog:"categoryDog", bird:"categoryBird"}[k] || "categoryAuto");
+const BAND_SCORE = {high:.9, medium:.7, low:.4};
+const bandFor = p => p >= .8 ? "high" : p >= .6 ? "medium" : "low";
+
+function careFor(taxonId, kind){
+  const own = taxonId && DATA.cards.find(c => c.taxon === taxonId);
+  if (own && own.tips && own.tips.length) return {status: own.status, fallback:false, tips: own.tips};
+  if (isAnimal(kind)) { const g = DATA.cards.find(c => c.kind === kind); if (g) return {status:g.status, fallback:true, tips:g.tips}; }
+  return null;
+}
+function matchFromTaxon(tx, conf, band){
+  return {taxonId:tx.id, key:tx.key, kind:tx.kind, sci:tx.sci, en:tx.en, bn:tx.bn, safety:tx.safety, confidence:conf, band: band || bandFor(conf)};
+}
+function findTaxon(kind, names){
+  const list = DATA.taxa.filter(x => !kind || x.kind === kind);
+  const norm = s => String(s || "").toLowerCase().replace(/[^a-z ]/g, " ").replace(/\s+/g, " ").trim();
+  const ns = names.map(norm).filter(Boolean);
+  for (const n of ns) { const hit = list.find(x => x.match.includes(n) || norm(x.sci) === n || norm(x.en) === n); if (hit) return hit; }
+  for (const n of ns) { const g = n.split(" ")[0]; const hit = list.find(x => x.genus && norm(x.genus) === g && x.kind === "plant"); if (hit) return hit; }
+  if (kind === "cat" || kind === "dog") {
+    if (ns.some(n => /mixed|local|domestic|deshi|street|stray/.test(n))) return taxaByKey[kind + "_local"];
+  }
+  return null;
+}
+function buildDemoResult(sample, requested){
+  const o = sample.out;
+  const matches = o.matches.map(([ref, c]) => {
+    const conf = typeof c === "number" ? c : BAND_SCORE[c];
+    const band = typeof c === "number" ? bandFor(c) : c;
+    if (typeof ref === "string") return matchFromTaxon(taxaByKey[ref], conf, band);
+    return {taxonId:null, key:null, kind:ref.kind, sci:ref.sci, en:ref.en, bn:null, safety:null, confidence:conf, band};
+  });
+  return {status:o.status, requested, detected:o.detected, vet:!!o.vet, matches};
+}
+
+/* ---------- geography (demo origin: GEC Circle) ---------- */
+const ORIGIN = {lat:22.3584, lng:91.8203};
+function distM(a, b){
+  const R = 6371000, r = x => x * Math.PI / 180;
+  const dLat = r(b.lat - a.lat), dLng = r(b.lng - a.lng);
+  const h = Math.sin(dLat/2)**2 + Math.cos(r(a.lat)) * Math.cos(r(b.lat)) * Math.sin(dLng/2)**2;
+  return Math.round(2 * R * Math.asin(Math.sqrt(h)));
+}
+const DAYS = ["sun","mon","tue","wed","thu","fri","sat"];
+function dhakaNow(){ const n = new Date(Date.now() + 6 * 3600 * 1000); return {day: DAYS[n.getUTCDay()], mins: n.getUTCHours() * 60 + n.getUTCMinutes()}; }
+function openNow(shop){
+  if (!shop.hours) return null;
+  const {day, mins} = dhakaNow();
+  const ranges = shop.hours[day] || [];
+  const toM = s => { const [h, m] = s.split(":").map(Number); return h * 60 + m; };
+  return ranges.some(([a, b]) => mins >= toM(a) && mins < toM(b));
+}
+function nearby({radius, kind, taxonId, types}){
+  const tx = taxonId ? taxaById[taxonId] : null;
+  const ts = types || (kind == null ? null : kind === "plant" ? ["nursery"] : ["pet_shop","vet_supply"]);
+  return DATA.shops
+    .filter(s => !ts || ts.includes(s.type))
+    .map(s => {
+      const d = distM(ORIGIN, s);
+      let catMatch = false;
+      if (tx && tx.cat) catMatch = (s.cats || []).includes(tx.cat);
+      else if (kind) catMatch = (s.cats || []).some(c => (catsById[c]?.kinds || []).includes(kind));
+      const st = taxonId ? (s.stock || []).find(x => x.taxon === taxonId) : null;
+      return {...s, dist:d, catMatch, inStock:!!st, stockPrice: st ? st.price : null, open: openNow(s)};
+    })
+    .filter(s => s.dist <= radius * 1000)
+    .sort((a, b) => (b.inStock - a.inStock) || (b.catMatch - a.catMatch) || (a.dist - b.dist));
+}
+const shopTypeLabel = ty => t({nursery:"shopNursery", pet_shop:"shopPetShop", vet_supply:"shopVetSupply", vet_clinic:"shopVetClinic"}[ty]);
+const distLabel = m => m < 1000 ? t("distanceM", {distance: num(Math.round(m / 10) * 10)}) : t("distanceKm", {distance: num(m / 1000, 1)});
+
+function accessoriesFor(kind, taxonId){
+  const out = [];
+  for (const it of DATA.items) {
+    const suits = (it.suits || []).filter(s => (taxonId && s.taxon === taxonId) || (!s.taxon && s.kind === kind));
+    if (!suits.length) continue;
+    const own = suits.find(s => s.taxon === taxonId);
+    out.push({...it, essential: own ? own.ess : suits.some(s => s.ess)});
+  }
+  return out;
+}
+
+/* ---------- photos ---------- */
+function photoHTML(photo, cls = "photo"){
+  if (!photo) return `<div class="${cls}" style="background:var(--surface2)">${icon("image")}</div>`;
+  if (photo.sample) { const s = SAMPLES.find(x => x.id === photo.sample); return `<div class="${cls}" style="background:${s.bg}">${s.emoji}</div>`; }
+  return `<div class="${cls}"><img alt="" src="${esc(photo.url)}"></div>`;
+}
+function resize(file, max){
+  return new Promise((resolve, reject) => {
+    const url = URL.createObjectURL(file);
+    const img = new Image();
+    img.onload = () => {
+      const k = Math.min(1, max / Math.max(img.width, img.height));
+      const c = document.createElement("canvas");
+      c.width = Math.round(img.width * k); c.height = Math.round(img.height * k);
+      c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
+      URL.revokeObjectURL(url);
+      c.toBlob(b => b ? resolve({blob:b, url:c.toDataURL("image/jpeg", .82)}) : reject(new Error("photo")), "image/jpeg", .82);
+    };
+    img.onerror = () => { URL.revokeObjectURL(url); reject(new Error("photo")); };
+    img.src = url;
+  });
+}
+async function thumb(photo){
+  if (!photo || photo.sample) return photo;
+  try { const r = await fetch(photo.url); const b = await r.blob(); const s = await resize(b, 320); return {url:s.url}; } catch(e) { return null; }
+}
+
+/* ---------- navigation ---------- */
+const cur = () => S.stack[S.stack.length - 1];
+function push(screen){ S.stack.push(screen); S.overlay = null; render(true); }
+function pop(){ const s = S.stack.pop(); if (s && s.ctl) s.ctl.abort(); S.overlay = null; render(true); }
+function replaceTop(screen){ S.stack[S.stack.length - 1] = screen; render(true); }
+function sheet(o){ S.overlay = o; renderOverlay(); }
+function closeOverlay(){ S.overlay = null; renderOverlay(); }
+let snackTimer;
+function snack(msg){
+  const el = document.getElementById("snack");
+  el.innerHTML = `<div class="snack" role="status">${esc(msg)}</div>`;
+  clearTimeout(snackTimer); snackTimer = setTimeout(() => el.innerHTML = "", 3200);
+}
+
+/* ---------- screens ---------- */
+const Screens = {};
+
+Screens.onboarding = () => ({
+  title: "", back:false, nav:false,
+  body: `
+    <div class="logo">${icon("center_focus_strong")}</div>
+    <h2>${T("welcomeTitle")}</h2>
+    <p>${T("welcomeBody")}</p>
+    <h3>${T("chooseLanguage")}</h3>
+    ${langRadios()}
+    <div class="card tint" style="margin-top:16px">
+      <div class="row" style="align-items:flex-start">${icon("info")}<div><b>${T("disclaimerTitle")}</b><p class="small">${T("disclaimerBody")}</p></div></div>
+    </div>
+    <div style="margin-top:20px"><button class="btn filled" data-a="start">${T("getStarted")}</button></div>`,
+});
+function langRadios(){
+  return ["bn","en"].map(l => `<label class="radio"><input type="radio" name="lang" value="${l}" data-a="lang" ${S.lang === l ? "checked" : ""}><span>${l === "bn" ? T("languageBangla") : T("languageEnglish")}</span></label>`).join("");
+}
+
+Screens.identify = () => {
+  const recent = S.recent.map((r, i) => `
+    <button class="li" data-a="openRecent" data-i="${i}">
+      ${icon(r.confident ? "check_circle" : "help")}
+      <div class="grow"><div>${esc(r.lang && r.title ? (S.lang === "bn" && r.title.bn ? r.title.bn : r.title.en) : "")}</div><div class="small muted">${esc(fmtDate(new Date(r.at)))}</div></div>
+      ${icon("chevron_right")}
+    </button>`).join("");
+  return {
+    title: t("appTitle"), back:false, nav:true,
+    body: `
+      <h2>${T("homeTitle")}</h2>
+      <div class="grid2">
+        <button class="tile" data-a="capture" data-c="plant">${icon("local_florist")}${T("categoryPlant")}</button>
+        <button class="tile" data-a="capture" data-c="cat">${icon("pets")}${T("categoryCat")}</button>
+        <button class="tile" data-a="capture" data-c="dog">${icon("sound_detection_dog_barking")}${T("categoryDog")}</button>
+        <button class="tile" data-a="capture" data-c="bird">${icon("raven")}${T("categoryBird")}</button>
+      </div>
+      <div style="margin-top:12px"><button class="btn tonal" data-a="capture" data-c="auto">${icon("auto_awesome")}${T("categoryAuto")}</button></div>
+      ${S.recent.length ? `<h3>${T("recentIdentifications")}</h3><div class="list">${recent}</div>` : ""}`,
+  };
+};
+
+Screens.identifying = (s) => ({
+  title: t("identifying"), back:true, nav:false,
+  body: `
+    ${photoHTML(s.photo)}
+    <div class="spinner" role="progressbar" aria-label="${T("identifying")}"></div>
+    <p class="center">${T("identifying")}</p>
+    ${s.slow ? `<p class="center small muted">${T("slowNetwork")}</p>` : ""}`,
+});
+
+Screens.error = (s) => ({
+  title: t("resultTitle"), back:true, nav:false,
+  body: `
+    ${photoHTML(s.photo)}
+    <div class="card err" style="margin-top:16px"><div class="row">${icon("error")}<div>${esc(s.message)}</div></div></div>
+    <div style="margin-top:16px"><button class="btn filled" data-a="retake">${icon("photo_camera")}${T("retakePhoto")}</button></div>`,
+});
+
+function confChip(m){
+  const label = m.kind === "plant" && m.confidence != null ? t("confidencePercent", {percent: pct(m.confidence)}) : t({high:"bandHigh", medium:"bandMedium", low:"bandLow"}[m.band]);
+  return `<span class="chip ${m.band}">${esc(label)}</span>`;
+}
+function safetyLine(m){
+  if (m.kind !== "plant") return "";
+  const key = {safe:"petSafeSafe", toxic_both:"petSafeToxicBoth", toxic_cats:"petSafeToxicCats", toxic_dogs:"petSafeToxicDogs"}[m.safety] || "petSafeUnknown";
+  const bad = String(m.safety || "").startsWith("toxic");
+  return `<div class="row" style="margin-top:12px">${icon(bad ? "warning" : "pets")}<span style="${bad ? "color:var(--error)" : ""}">${T(key)}</span></div>`;
+}
+const TOPIC_ICON = {light:"light_mode", water:"water_drop", soil:"potted_plant", temperature:"thermostat", fertiliser:"compost", food:"restaurant", space:"home", grooming:"content_cut", exercise:"directions_run", vaccination:"vaccines"};
+const topicLabel = k => t({light:"topicLight", water:"topicWater", soil:"topicSoil", temperature:"topicTemperature", fertiliser:"topicFertiliser", food:"topicFood", space:"topicSpace", grooming:"topicGrooming", exercise:"topicExercise", vaccination:"topicVaccination"}[k] || k);
+function careCard(care){
+  const flag = care.status === "ai_generated" ? "careAiGenerated" : care.fallback ? "careGeneral" : care.status === "draft" ? "careDraft" : null;
+  return `<div class="card">
+    <div class="row" style="justify-content:space-between"><b>${T("careBasics")}</b></div>
+    ${flag ? `<div class="note" style="margin:6px 0 4px">${icon("info")}<span>${T(flag)}</span></div>` : ""}
+    ${care.tips.map(x => `<div class="tip">${icon(TOPIC_ICON[x.topic] || "eco")}<div><b>${esc(topicLabel(x.topic))}</b><span>${esc(S.lang === "bn" && x.bn ? x.bn : x.en)}</span></div></div>`).join("")}
+  </div>`;
+}
+function vetCard(emph){
+  return `<button class="card ${emph ? "err" : ""}" data-a="vetHelp" style="width:100%;text-align:left;cursor:pointer;margin-top:12px;display:block">
+    <div class="row">${icon("medical_services")}<div class="grow"><b>${T("vetAdviceTitle")}</b><div class="small">${T("vetAdviceBody")}</div></div>${icon("chevron_right")}</div></button>`;
+}
+const reportLink = () => `<div style="margin-top:6px"><button class="btn text" data-a="report">${icon("flag")}${T("notRight")}</button></div>`;
+
+Screens.result = (s) => {
+  const r = s.res;
+  const kind = r.detected || (r.requested !== "auto" ? r.requested : "plant");
+  if (r.status === "confident" && r.matches.length) {
+    const m = r.matches[s.sel || 0];
+    const care = s.aiCare?.[s.sel || 0] || careFor(m.taxonId, m.kind);
+    const showDiff = r.requested !== "auto" && r.detected && r.requested !== r.detected;
+    return {title: t("resultTitle"), back:true, nav:false, body: `
+      ${photoHTML(s.photo)}
+      ${showDiff ? `<div class="note">${icon("info")}<span>${T("detectedDifferent", {kind: kindLabel(r.detected)})}</span></div>` : ""}
+      <h2 style="margin:16px 0 0">${esc(nameOf(m))}</h2>
+      ${S.lang === "bn" && m.bn ? `<div style="font-weight:500">${esc(m.en)}</div>` : ""}
+      <div class="italic muted">${esc(m.sci)}</div>
+      <div class="chips" style="margin-top:10px">${confChip(m)}</div>
+      ${safetyLine(m)}
+      <div style="margin-top:16px">
+        ${care && care.tips.length ? careCard(care) : `<div class="card row"><div class="grow">${s.loadingCare ? T("aiCaring") : T("careNone")}</div>${s.loadingCare ? `<div class="spinner" style="width:24px;height:24px;border-width:3px;margin:0"></div>` : (S.live ? `<button class="btn text" data-a="loadCare">${T("loadCareTips")}</button>` : "")}</div>`}
+      </div>
+      ${isAnimal(m.kind) ? vetCard(r.vet) : ""}
+      <div style="margin-top:16px">
+        <button class="btn filled" data-a="whereToBuy">${icon("storefront")}${T(m.kind === "plant" ? "whereToBuy" : "whereToBuySupplies")}</button>
+        <button class="btn" data-a="accessories">${icon("checklist")}${T("whatYouNeed")}</button>
+        <button class="btn" data-a="save">${icon("bookmark_add")}${T("saveToCollection")}</button>
+      </div>
+      ${r.matches.length > 1 ? `<h3>${T("otherPossibilities")}</h3><div class="list">${r.matches.map((x, i) => i === (s.sel || 0) ? "" : `
+        <button class="li" data-a="selMatch" data-i="${i}"><div class="grow"><div>${esc(nameOf(x))}</div><div class="small muted italic">${esc(x.sci)}</div></div>${confChip(x)}</button>`).join("")}</div>` : ""}
+      ${reportLink()}
+      <div class="note">${icon("info")}<span>${T("resultDisclaimer")}</span></div>`};
+  }
+  if (r.status === "low_confidence") {
+    return {title: t("resultTitle"), back:true, nav:false, body: `
+      ${photoHTML(s.photo)}
+      <div class="row" style="margin-top:16px">${icon("help", "fill")}<h2 style="margin:0;font-size:20px">${T("lowConfidenceTitle")}</h2></div>
+      <p>${T("lowConfidenceBody")}</p>
+      <div class="note">${icon("lightbulb")}<span>${T("retakeTips")}</span></div>
+      <button class="btn filled" data-a="retake">${icon("photo_camera")}${T("retakePhoto")}</button>
+      ${r.matches.length ? `<h3 class="small">${T("possibleMatches")}</h3><div class="list">${r.matches.map(x => `
+        <div class="li" style="cursor:default"><div class="grow"><div>${esc(nameOf(x))}</div><div class="small muted italic">${esc(x.sci)}</div></div>${confChip(x)}</div>`).join("")}</div>` : ""}
+      ${isAnimal(kind) ? vetCard(r.vet) : ""}
+      ${reportLink()}`};
+  }
+  return {title: t("resultTitle"), back:true, nav:false, body: `
+    ${photoHTML(s.photo)}
+    <h2 style="margin-top:16px;font-size:20px">${T("notRecognisedTitle")}</h2>
+    <p>${T("notRecognisedBody")}</p>
+    <div class="note">${icon("lightbulb")}<span>${T("retakeTips")}</span></div>
+    <button class="btn filled" data-a="retake">${icon("photo_camera")}${T("retakePhoto")}</button>`};
+};
+
+Screens.where = (s) => {
+  if (!S.located) {
+    return {title: s.title, back:true, nav:false, body: `
+      <div class="card" style="margin-top:8px">
+        <div class="row" style="align-items:flex-start">${icon("my_location")}<div><b>${T("locationWhyTitle")}</b><p>${T("locationWhyBody")}</p></div></div>
+        <div style="margin-top:10px"><button class="btn filled" data-a="locate">${icon("near_me")}${T("allowLocation")}</button></div>
+      </div>`};
+  }
+  const shops = nearby({radius:s.radius, kind:s.kind, taxonId:s.taxonId, types:s.types});
+  const chips = [1,3,5,10].map(km => `<button class="fchip ${s.radius === km ? "on" : ""}" data-a="radius" data-km="${km}">${T("radiusKm", {km: num(km)})}</button>`).join("");
+  return {title: s.title, back:true, nav:false, body: `
+    <div class="note" style="margin-top:0">${icon("location_on")}<span>${esc(t("demoLocation"))}</span></div>
+    <div class="chips">${chips}</div>
+    ${shops.length ? shops.map(x => shopCard(x, s)).join("") : `<p class="center muted" style="margin-top:40px">${T("noShopsFound", {km: num(s.radius)})}</p>`}`};
+};
+function shopCard(x, s){
+  const badges = [];
+  if (x.inStock) badges.push(`<span class="chip stock">${icon("inventory_2")}${T("inStockBadge")}${x.stockPrice ? " · ৳" + esc(num(x.stockPrice)) : ""}</span>`);
+  else if (s.taxonId && x.catMatch) badges.push(`<span class="chip likely">${T("likelyAvailable")}</span>`);
+  const open = x.open == null ? `<span class="chip closed">${T("hoursUnknown")}</span>` : x.open ? `<span class="chip open">● ${T("openNow")}</span>` : `<span class="chip closed">${T("closedNow")}</span>`;
+  return `<div class="shop">
+    <div class="row"><div class="grow"><div class="name" data-a="shop" data-id="${x.id}">${esc(nameOf(x))}</div>
+      <div class="small muted">${esc(shopTypeLabel(x.type))} · ${esc(distLabel(x.dist))}${x.area ? " · " + esc(x.area) : ""}</div></div>
+      <button class="iconbtn" data-a="shop" data-id="${x.id}" aria-label="${T("openingHours")}">${icon("chevron_right")}</button></div>
+    <div class="chips" style="margin-top:8px;align-items:center">${badges.join("")}${open}${x.rating ? `<span class="small muted">★ ${esc(num(x.rating, 1))} (${esc(num(x.rc))})</span>` : ""}${x.partner ? `<span class="badge">${T("verifiedShop")}</span>` : ""}</div>
+    ${shopActions(x, s.itemName)}
+  </div>`;
+}
+function shopActions(x, item){
+  return `<div class="acts">
+    ${x.phone ? `<button class="btn" data-a="call" data-id="${x.id}">${icon("call")}${T("callShop")}</button>` : ""}
+    ${x.wa ? `<button class="btn" data-a="wa" data-id="${x.id}" data-item="${esc(item || "")}">${icon("chat")}${T("whatsappShop")}</button>` : ""}
+    <a class="btn" href="https://www.google.com/maps/dir/?api=1&destination=${x.lat},${x.lng}" target="_blank" rel="noopener">${icon("directions")}${T("directions")}</a>
+  </div>`;
+}
+
+Screens.shop = (s) => {
+  const x = DATA.shops.find(z => z.id === s.id);
+  const order = ["sat","sun","mon","tue","wed","thu","fri"];
+  const today = dhakaNow().day;
+  const dayName = d => new Intl.DateTimeFormat(loc(), {weekday:"long", timeZone:"UTC"}).format(new Date(Date.UTC(2026, 9, 3 + order.indexOf(d))));
+  const hm = s2 => { const [h, m] = s2.split(":").map(Number); return fmtTime(new Date(2000, 0, 1, h, m)); };
+  const open = openNow(x);
+  return {title: nameOf(x), back:true, nav:false, body: `
+    <div class="row" style="margin-top:4px"><div class="grow"><h2 style="margin:0">${esc(nameOf(x))}</h2>
+      <div class="muted">${esc(shopTypeLabel(x.type))} · ${esc(distLabel(distM(ORIGIN, x)))}</div></div></div>
+    <div class="chips" style="margin:10px 0">${open == null ? `<span class="chip closed">${T("hoursUnknown")}</span>` : open ? `<span class="chip open">● ${T("openNow")}</span>` : `<span class="chip closed">${T("closedNow")}</span>`}
+      ${x.partner ? `<span class="badge">${T("verifiedShop")}</span>` : ""}
+      ${x.rating ? `<span class="small muted">${T("ratingLabel", {rating: num(x.rating, 1), count: num(x.rc)})}</span>` : ""}</div>
+    ${shopActions(x, s.itemName)}
+    <div class="kv" style="margin-top:12px">${icon("location_on")}<div><div class="small muted">${T("shopAddress")}</div>${esc((S.lang === "bn" && x.abn) || x.aen || "")}${x.area ? ", " + esc(x.area) : ""}</div></div>
+    <div class="kv">${icon("call")}<div><div class="small muted">${T("callShop")}</div><span class="mono">${esc(x.phone || "")}</span></div></div>
+    <h3>${T("openingHours")}</h3>
+    ${x.hours ? `<table class="hours">${order.map(d => `<tr class="${d === today ? "today" : ""}"><td>${esc(dayName(d))}</td><td>${(x.hours[d] || []).length ? x.hours[d].map(([a, b]) => esc(hm(a) + " – " + hm(b))).join(", ") : T("closedDay")}</td></tr>`).join("")}</table>` : `<p class="muted">${T("hoursUnknown")}</p>`}`};
+};
+
+Screens.accessories = (s) => {
+  const items = accessoriesFor(s.kind, s.taxonId);
+  const group = (ess) => items.filter(i => i.essential === ess).map(i => `
+    <button class="li" data-a="buyItem" data-id="${i.id}">
+      <div class="thumb" style="background:var(--surface2)">${icon(itemIcon(i))}</div>
+      <div class="grow"><div>${esc(nameOf(i))}</div><div class="small muted">${T("priceAskShop")}</div></div>${icon("storefront")}
+    </button>`).join("");
+  const e = group(true), n = group(false);
+  return {title: t("whatYouNeed"), back:true, nav:false, body: items.length ? `
+    ${e ? `<h3>${T("essential")}</h3><div class="list">${e}</div>` : ""}
+    ${n ? `<h3>${T("niceToHave")}</h3><div class="list">${n}</div>` : ""}` : `<p class="muted center" style="margin-top:40px">${T("accessoriesEmpty")}</p>`};
+};
+function itemIcon(i){
+  const slug = catsById[i.cat]?.slug || "";
+  return ({pots:"potted_plant", potting_mix:"landscape", fertiliser:"compost", plant_tools:"handyman", cat_food:"set_meal", dog_food:"set_meal", bird_food:"grain", litter:"inventory_2", collars_leashes:"link", cages:"grid_on", bowls:"soup_kitchen", beds_carriers:"bed", grooming:"brush", toys:"toys"})[slug] || "shopping_bag";
+}
+
+Screens.vet = () => ({
+  title: t("vetHelpTitle"), back:true, nav:false, body: `
+    <div class="card err" style="margin-top:8px"><div class="row" style="align-items:flex-start">${icon("medical_services")}<div><b>${T("vetHelpTitle")}</b><p>${T("vetHelpBody")}</p></div></div></div>
+    <div style="margin-top:16px"><button class="btn filled" data-a="vetClinics">${icon("local_hospital")}${T("vetClinicsNearby")}</button></div>`,
+});
+
+Screens.signin = (s) => ({
+  title: t("verifyPhone"), back:true, nav:false, body: `
+    <h2>${T("signInTitle")}</h2>
+    <p class="muted">${T("signInBody")}</p>
+    <label class="field"><span>${T("phoneLabel")}</span><input class="input mono" id="phoneIn" inputmode="tel" placeholder="${T("phoneHint")}" value="${esc(s.phone || "")}" ${s.codeSent ? "disabled" : ""}></label>
+    ${s.phoneErr ? `<div class="err-text">${T("phoneInvalid")}</div>` : ""}
+    ${s.codeSent ? `
+      <label class="field"><span>${T("codeLabel")}</span><input class="input mono" id="codeIn" inputmode="numeric" maxlength="6" autocomplete="one-time-code"></label>
+      ${s.codeErr ? `<div class="err-text">${T("codeInvalid")}</div>` : ""}
+      <div class="note">${icon("info")}<span>${T("demoCode")}</span></div>
+      <button class="btn filled" data-a="verifyCode">${T("verify")}</button>
+      <button class="btn text" data-a="resend">${T("resendCode")}</button>` : `
+      <button class="btn filled" data-a="sendCode" style="margin-top:8px">${T("sendCode")}</button>`}`,
+});
+
+Screens.collection = () => ({
+  title: t("navCollection"), back:false, nav:true, body: S.collection.length ? `<div class="list">${S.collection.map(c => {
+    const next = c.reminders.length ? c.reminders.map(r => r.next).sort((a, b) => a - b)[0] : null;
+    return `<button class="li" data-a="openItem" data-id="${c.id}">${photoHTML(c.photo, "thumb")}
+      <div class="grow"><div>${esc(c.nickname || nameOf(c))}</div><div class="small muted">${c.nickname ? esc(nameOf(c)) : `<span class="italic">${esc(c.sci)}</span>`}</div>
+      ${next ? `<div class="small" style="color:var(--primary)">${icon("notifications")} ${T("reminderNext", {date: fmtDate(new Date(next)) + ", " + fmtTime(new Date(next))})}</div>` : ""}</div>${icon("chevron_right")}</button>`;
+  }).join("")}</div>` : `<div class="center" style="margin-top:60px">${icon("collections_bookmark")}<p class="muted">${T("collectionEmpty")}</p></div>`,
+});
+
+const REMINDER_TYPES = k => k === "plant" ? ["water","fertilise","custom"] : ["feed","groom","vaccinate","custom"];
+const reminderLabel = ty => t({water:"reminderWater", fertilise:"reminderFertilise", feed:"reminderFeed", groom:"reminderGroom", vaccinate:"reminderVaccinate", custom:"reminderCustom"}[ty]);
+Screens.item = (s) => {
+  const c = S.collection.find(x => x.id === s.id);
+  if (!c) return {title:"", back:true, nav:false, body:""};
+  return {title: c.nickname || nameOf(c), back:true, nav:false, actions:`<button class="iconbtn" data-a="deleteItem" aria-label="${T("delete")}">${icon("delete")}</button>`, body: `
+    ${photoHTML(c.photo)}
+    <h2 style="margin:16px 0 0">${esc(nameOf(c))}</h2>
+    <div class="italic muted">${esc(c.sci)}</div>
+    <label class="field"><span>${T("nickname")}</span><div class="row"><input class="input" id="nickIn" placeholder="${T("nicknameHint")}" value="${esc(c.nickname || "")}"><button class="btn tonal" style="width:auto" data-a="saveNick">${T("save")}</button></div></label>
+    <div class="row" style="margin-top:18px"><h3 class="grow" style="margin:0">${T("reminders")}</h3><button class="btn text" data-a="addReminder">${icon("add_alarm")}${T("addReminder")}</button></div>
+    ${c.reminders.length ? `<div class="list">${c.reminders.map(r => `
+      <div class="li" style="cursor:default">${icon("notifications")}<div class="grow"><div>${esc(reminderLabel(r.type))}${r.label ? ": " + esc(r.label) : ""}</div>
+      <div class="small muted">${T("reminderNext", {date: fmtDate(new Date(r.next)) + ", " + fmtTime(new Date(r.next))})} · ${esc(r.every ? t("everyNDays", {days: r.every}).replace(String(r.every), num(r.every)) : t("reminderOnce"))}</div></div>
+      <button class="btn text" data-a="doneReminder" data-rid="${r.id}">${T("markDone")}</button><button class="iconbtn" data-a="delReminder" data-rid="${r.id}" aria-label="${T("delete")}">${icon("close")}</button></div>`).join("")}</div>` : `<p class="muted">${T("noReminders")}</p>`}
+    <div class="note">${icon("info")}<span>${T("reminderPreview")}</span></div>
+    <hr>
+    <button class="btn" data-a="itemCare">${icon("eco")}${T("careBasics")}</button>`};
+};
+
+Screens.care = (s) => {
+  const care = careFor(s.taxonId, s.kind);
+  return {title: t("careBasics"), back:true, nav:false, body: care ? careCard(care) : `<p class="muted">${T("careNone")}</p>`};
+};
+
+Screens.settings = () => ({
+  title: t("navSettings"), back:false, nav:true, body: `
+    <h3 style="margin-top:8px">${T("settingsLanguage")}</h3>
+    <div class="card" style="padding:4px 16px">${langRadios()}</div>
+    <h3>${T("settingsAccount")}</h3>
+    <div class="card">
+      <p style="margin-top:0">${S.phone ? T("signedInAs", {phone: S.phone}) : T("guestAccount")}</p>
+      ${S.phone ? `<button class="btn" data-a="signOut">${icon("logout")}${T("signOut")}</button>` : `<button class="btn filled" data-a="verifyPhone">${icon("verified_user")}${T("verifyPhone")}</button>`}
+      <button class="btn danger" data-a="deleteAccount">${icon("delete_forever")}${T("deleteAccount")}</button>
+    </div>
+    <h3>${T("settingsPrivacy")}</h3>
+    <div class="card"><div class="row" style="align-items:flex-start">${icon("shield")}<p style="margin:0">${T("privacySummary")}</p></div></div>
+    <div style="margin-top:12px"><button class="btn text" data-a="about">${icon("info")}${T("settingsAbout")}</button></div>`,
+});
+
+/* ---------- overlays ---------- */
+function renderOverlay(){
+  const el = document.getElementById("overlay");
+  const o = S.overlay;
+  if (!o) { el.innerHTML = ""; return; }
+  let inner = "";
+  if (o.type === "capture") {
+    const tips = o.cat === "plant" ? t("photoTipPlant") : o.cat === "auto" ? t("photoTipPlant") + " " + t("photoTipAnimal") : t("photoTipAnimal");
+    const samples = SAMPLES.filter(x => o.cat === "auto" || x.cat === o.cat || x.cat === "auto");
+    inner = `<div class="sheet"><div class="grab"></div>
+      <div class="row"><b class="grow" style="font-size:17px">${esc(o.cat === "auto" ? t("categoryAuto") : kindLabel(o.cat))}</b><button class="iconbtn" data-a="closeOverlay" aria-label="${T("close")}">${icon("close")}</button></div>
+      <div class="note">${icon("tips_and_updates")}<span><b>${T("photoTipsTitle")}:</b> ${esc(tips)}</span></div>
+      <button class="btn filled" data-a="pickCam">${icon("photo_camera")}${T("takePhoto")}</button>
+      <button class="btn" data-a="pickGal">${icon("photo_library")}${T("chooseFromGallery")}</button>
+      ${S.live && S.liveImages && !S.liveBlocked ? `<div class="note">${icon("auto_awesome")}<span>${T("liveNote")}</span></div>` : ""}
+      <h3>${T("trySample")}</h3>
+      <div class="samples">${samples.map(x => `<button class="sample" data-a="sample" data-id="${x.id}"><div class="art" style="background:${x.bg}">${x.emoji}</div><div class="cap">${esc(nameOf(x))}</div></button>`).join("")}</div>
+    </div>`;
+  } else if (o.type === "outcome") {
+    inner = `<div class="sheet"><div class="grab"></div><b style="font-size:17px">${T("noLiveTitle")}</b><p class="muted">${T("noLiveBody")}</p>
+      ${[["confident","outConfident","check_circle"],["low","outLow","help"],["vet","outVet","medical_services"],["none","outNone","hide_image"]].map(([k, l, ic]) =>
+        `<button class="btn" data-a="outcome" data-k="${k}">${icon(ic)}${T(l)}</button>`).join("")}
+      <button class="btn text" data-a="closeOverlay">${T("cancel")}</button></div>`;
+  } else if (o.type === "call") {
+    inner = `<div class="sheet"><div class="grab"></div><b style="font-size:17px">${esc(o.name)}</b><p class="muted">${T("callDemo")}</p>
+      <div class="big-number mono">${esc(o.phone)}</div><button class="btn" data-a="closeOverlay">${T("close")}</button></div>`;
+  } else if (o.type === "wa") {
+    inner = `<div class="sheet"><div class="grab"></div><b style="font-size:17px">${esc(o.name)}</b><p class="muted">${T("waDemo", {phone: o.phone})}</p>
+      <div class="msgbox">${esc(o.msg)}</div><button class="btn" data-a="closeOverlay">${T("close")}</button></div>`;
+  } else if (o.type === "report") {
+    inner = `<div class="sheet"><div class="grab"></div><b style="font-size:17px">${T("reportTitle")}</b>
+      ${["reportWrongMatch","reportNotPlantOrPet","reportOther"].map((k, i) => `<label class="radio"><input type="radio" name="rep" value="${k}" ${i === 0 ? "checked" : ""}><span>${T(k)}</span></label>`).join("")}
+      <label class="field"><span>${T("reportSuggestedName")}</span><input class="input" maxlength="80"></label>
+      <label class="field"><span>${T("reportNote")}</span><textarea class="input" rows="2" maxlength="300"></textarea></label>
+      <button class="btn filled" data-a="sendReport">${T("reportSend")}</button></div>`;
+  } else if (o.type === "reminder") {
+    const types = REMINDER_TYPES(o.kind);
+    const d = new Date(Date.now() + 3600e3);
+    const pad = n => String(n).padStart(2, "0");
+    inner = `<div class="sheet"><div class="grab"></div><b style="font-size:17px">${T("addReminder")}</b>
+      <div class="chips" style="margin-top:12px" id="remTypes">${types.map((ty, i) => `<button class="fchip ${i === 0 ? "on" : ""}" data-a="remType" data-ty="${ty}">${esc(reminderLabel(ty))}</button>`).join("")}</div>
+      <label class="field"><span>${T("reminderLabel")}</span><input class="input" id="remLabel" maxlength="60"></label>
+      <div class="grid2"><label class="field" style="margin:0"><span>${T("reminderDate")}</span><input class="input" type="date" id="remDate" value="${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}"></label>
+      <label class="field" style="margin:0"><span>${T("reminderTime")}</span><input class="input" type="time" id="remTime" value="${pad(d.getHours())}:00"></label></div>
+      <label class="field"><span>${T("reminderRepeat")}</span><select class="input" id="remRepeat">
+        <option value="0">${T("reminderOnce")}</option>${[1,2,3,7,14,30].map(n => `<option value="${n}" ${n === 7 && o.kind === "plant" ? "selected" : ""}>${esc(t("everyNDays", {days:n}).replace(String(n), num(n)))}</option>`).join("")}</select></label>
+      <div id="remErr" class="err-text"></div>
+      <button class="btn filled" data-a="saveReminder">${T("save")}</button><button class="btn text" data-a="closeOverlay">${T("cancel")}</button></div>`;
+  } else if (o.type === "confirm") {
+    inner = `<div class="dialog" role="alertdialog"><p style="margin-top:0">${esc(o.text)}</p>
+      <div class="acts"><button class="btn text" data-a="closeOverlay">${T("cancel")}</button><button class="btn text" style="color:var(--error)" data-a="confirmYes">${esc(o.yes)}</button></div></div>`;
+  } else if (o.type === "info") {
+    inner = `<div class="dialog"><h3>${esc(o.title)}</h3><p>${esc(o.text)}</p><div class="acts"><button class="btn text" data-a="closeOverlay">${T("close")}</button></div></div>`;
+  }
+  el.innerHTML = `<div class="scrim ${o.type === "confirm" || o.type === "info" ? "center" : ""}" data-a="scrim">${inner}</div>`;
+}
+
+/* ---------- render ---------- */
+function render(scrollTop){
+  document.documentElement.lang = S.lang;
+  document.getElementById("ribbon").innerHTML = `${icon("science")}<span>${T("ribbon")}</span>`;
+  let scr;
+  if (!S.onboarded) scr = Screens.onboarding();
+  else if (S.stack.length) scr = Screens[cur().name](cur());
+  else scr = Screens[S.tab]();
+  document.getElementById("appbar").innerHTML = `
+    ${scr.back ? `<button class="iconbtn" data-a="back" aria-label="Back">${icon("arrow_back")}</button>` : ""}
+    <h1>${esc(scr.title || "")}</h1>${scr.actions || ""}`;
+  const content = document.getElementById("content");
+  content.innerHTML = scr.body;
+  if (scrollTop) content.scrollTop = 0;
+  const nav = document.getElementById("navbar");
+  nav.style.display = scr.nav ? "" : "none";
+  if (scr.nav) nav.innerHTML = [["identify","center_focus_strong","navIdentify"],["collection","collections_bookmark","navCollection"],["settings","settings","navSettings"]]
+    .map(([k, ic, l]) => `<button class="${S.tab === k ? "on" : ""}" data-a="tab" data-tab="${k}"><span class="pill">${icon(ic, S.tab === k ? "fill" : "")}</span>${T(l)}</button>`).join("");
+  renderOverlay();
+}
+
+/* ---------- identification ---------- */
+function startIdentify(photo, requested, sample){
+  const screen = {name:"identifying", photo, requested, slow:false, ctl:new AbortController()};
+  push(screen);
+  const finish = (res) => {
+    if (cur() !== screen) return;
+    S.recent.unshift({at:Date.now(), lang:true, confident: res.status === "confident",
+      title: res.status === "confident" ? {en:res.matches[0].en, bn:res.matches[0].bn} : {en:L.en[res.status === "low_confidence" ? "lowConfidenceTitle" : "notRecognisedTitle"], bn:L.bn[res.status === "low_confidence" ? "lowConfidenceTitle" : "notRecognisedTitle"]},
+      res, photo: photo.sample ? photo : null});
+    S.recent = S.recent.slice(0, 8); persist();
+    replaceTop({name:"result", res, photo, sel:0, aiCare:{}});
+  };
+  if (sample) { setTimeout(() => finish(buildDemoResult(sample, requested)), 1300); return; }
+  setTimeout(() => { if (cur() === screen) { screen.slow = true; render(); } }, 7000);
+  identifyLive(photo, requested, screen.ctl.signal).then(finish).catch(e => {
+    if (cur() !== screen) return;
+    const code = e && e.code;
+    if (code === "cancelled") return;
+    if (["not_granted","sampling_disabled","not_declared","capability_disabled","capability_removed","images_unavailable"].includes(code)) {
+      S.liveBlocked = true; S.stack.pop(); render(); sheet({type:"outcome", photo, requested}); return;
+    }
+    const msg = code === "image_rejected" ? t("errorPhoto") : code === "rate_limited" ? t("errorQuota", {limit: num(10)}) : t("errorServer");
+    replaceTop({name:"error", photo, requested, message: msg});
+  });
+}
+
+const IDENTIFY_PROMPT = (requested) => `You identify plants and pets from one photo for a hobbyist app in Bangladesh. The attached image is the user's photo.
+${requested === "auto" ? "First decide whether the photo shows a plant, a cat, a dog, a bird, or something else." : `The user says the photo shows a ${requested}. If it clearly does not, set "category" to what it does show.`}
+Rules:
+- Never diagnose illness. If the animal or plant looks unwell, set "health_concern_visible" to true and say nothing else about it.
+- For cats and dogs, give the likely breed. Most cats and dogs in Bangladesh are local or mixed breed: say "Mixed breed cat" or "Mixed breed dog" when no recognised breed fits well.
+- For birds and plants, give the scientific name.
+- Give at most 3 candidates, best first. For plants give "probability" (0 to 1, honest; the three should not sum above 1). For animals give a "confidence" band: "high" only when you are sure.
+- Add the usual Bangla common name in "common_name_bn" when one is widely used, otherwise null.
+- If the photo is blurred, too dark, or shows no plant, cat, dog or bird, set "image_usable" to false or "category" to "other".
+Reply with only JSON in exactly this shape:
+{"category":"plant|cat|dog|bird|other","image_usable":true,"health_concern_visible":false,"candidates":[{"name":"scientific name or breed","common_name_en":"English common name","common_name_bn":"বাংলা নাম or null","probability":0.0,"confidence":"high|medium|low"}]}`;
+
+async function identifyLive(photo, requested, signal){
+  const j = await S.live.json(IDENTIFY_PROMPT(requested), {images:[photo.blob], modelTier:"default", signal, cache:false});
+  const cats = ["plant","cat","dog","bird","other"];
+  const category = cats.includes(j && j.category) ? j.category : "other";
+  const cands = (Array.isArray(j && j.candidates) ? j.candidates : []).filter(c => c && c.name).slice(0, 3);
+  if (j?.image_usable === false || category === "other" || !cands.length) return {status:"not_recognised", requested, detected:null, vet:false, matches:[]};
+  const merged = [];
+  for (const c of cands) {
+    const isPlant = category === "plant";
+    const band = ["high","medium","low"].includes(c.confidence) ? c.confidence : "low";
+    let conf = isPlant && typeof c.probability === "number" ? Math.max(0, Math.min(1, c.probability)) : BAND_SCORE[band];
+    const tx = findTaxon(category, [c.name, c.common_name_en]);
+    const prev = tx && merged.find(m => m.taxonId === tx.id);
+    if (prev) { prev.confidence = Math.min(1, prev.confidence + (isPlant ? conf : 0)); if (isPlant) prev.band = bandFor(prev.confidence); continue; }
+    if (tx) merged.push(matchFromTaxon(tx, conf, isPlant ? bandFor(conf) : band));
+    else merged.push({taxonId:null, key:null, kind:category, sci:String(c.name).slice(0, 120), en:String(c.common_name_en || c.name).slice(0, 120), bn: c.common_name_bn ? String(c.common_name_bn).slice(0, 120) : null, safety:null, confidence:conf, band: isPlant ? bandFor(conf) : band});
+  }
+  merged.sort((a, b) => b.confidence - a.confidence);
+  const status = merged[0].confidence >= .6 ? "confident" : "low_confidence";
+  return {status, requested, detected:category, vet: j.health_concern_visible === true && category !== "plant", matches:merged};
+}
+
+async function loadAiCare(s){
+  const m = s.res.matches[s.sel || 0];
+  const idx = s.sel || 0;
+  s.loadingCare = true; render();
+  const topics = m.kind === "plant" ? "light, water, soil, temperature, fertiliser" : "food, space, grooming, exercise, vaccination";
+  try {
+    const j = await S.live.json(`You write short, general care guidance for a hobbyist app in Bangladesh, for: ${m.sci} (${m.en}), a ${m.kind}.
+Give 3 to 5 tips, each one or two plain sentences of at most 200 characters, in English ("en") and natural Bangla ("bn"). Topics come from: ${topics}. Never give medical or dosage advice; for any health problem say to consult a vet.
+Reply with only JSON: {"tips":[{"topic":"water","en":"...","bn":"..."}]}`, {modelTier:"quick"});
+    const tips = (Array.isArray(j && j.tips) ? j.tips : []).filter(x => x && x.en).slice(0, 5).map(x => ({topic:String(x.topic || ""), en:String(x.en).slice(0, 240), bn: x.bn ? String(x.bn).slice(0, 300) : null}));
+    if (tips.length) s.aiCare[idx] = {status:"ai_generated", fallback:false, tips};
+  } catch(e) { if (e && e.code !== "cancelled") snack(t("errorServer")); }
+  s.loadingCare = false; if (cur() === s) render();
+}
+
+async function onFile(input){
+  const f = input.files && input.files[0];
+  input.value = "";
+  if (!f) return;
+  const cat = S.overlay && S.overlay.cat || "auto";
+  closeOverlay();
+  let photo;
+  try { const r = await resize(f, 1024); photo = {blob:r.blob, url:r.url}; }
+  catch(e) { snack(t("errorPhoto")); return; }
+  if (S.live && S.liveImages && !S.liveBlocked) startIdentify(photo, cat, null);
+  else sheet({type:"outcome", photo, requested:cat});
+}
+
+/* ---------- actions ---------- */
+const A = {
+  start(){ S.onboarded = true; persist(); render(true); },
+  lang(el){ S.lang = el.value; persist(); render(); },
+  tab(el){ S.tab = el.dataset.tab; S.stack = []; render(true); },
+  back(){ pop(); },
+  scrim(el, ev){ if (ev.target === el) closeOverlay(); },
+  closeOverlay(){ closeOverlay(); },
+  capture(el){ sheet({type:"capture", cat: el.dataset.c}); },
+  pickCam(){ document.getElementById("fileCam").click(); },
+  pickGal(){ document.getElementById("fileGal").click(); },
+  sample(el){ const s = SAMPLES.find(x => x.id === el.dataset.id); const cat = S.overlay.cat; closeOverlay(); startIdentify({sample:s.id}, cat, s); },
+  outcome(el){
+    const o = S.overlay; closeOverlay();
+    const s = SAMPLES.find(x => x.id === OUTCOMES[el.dataset.k]);
+    const req = el.dataset.k === "vet" && o.requested === "plant" ? "auto" : o.requested;
+    startIdentify(o.photo, req, s);
+  },
+  openRecent(el){ const r = S.recent[+el.dataset.i]; push({name:"result", res:r.res, photo:r.photo, sel:0, aiCare:{}}); },
+  retake(){ const s = cur(); const req = s.requested || s.res?.requested || "auto"; S.stack.pop(); render(); sheet({type:"capture", cat:req}); },
+  selMatch(el){ cur().sel = +el.dataset.i; render(true); },
+  loadCare(){ loadAiCare(cur()); },
+  vetHelp(){ push({name:"vet"}); },
+  vetClinics(){ push({name:"where", title:t("vetClinicsNearby"), types:["vet_clinic"], radius:3}); },
+  whereToBuy(){
+    const s = cur(), m = s.res.matches[s.sel || 0];
+    push({name:"where", title: t(m.kind === "plant" ? "whereToBuy" : "whereToBuySupplies"), kind:m.kind, taxonId: m.kind === "plant" ? m.taxonId : null, itemName: nameOf(m), radius:3});
+  },
+  accessories(){ const s = cur(), m = s.res.matches[s.sel || 0]; push({name:"accessories", kind:m.kind, taxonId:m.taxonId}); },
+  buyItem(el){ const s = cur(); const it = DATA.items.find(i => i.id === +el.dataset.id); push({name:"where", title:nameOf(it), kind:s.kind, itemName:nameOf(it), radius:3}); },
+  locate(){ S.located = true; render(); },
+  radius(el){ cur().radius = +el.dataset.km; render(); },
+  shop(el){ push({name:"shop", id:el.dataset.id, itemName: cur().itemName}); },
+  call(el){ const x = DATA.shops.find(z => z.id === el.dataset.id); sheet({type:"call", name:nameOf(x), phone:x.phone}); },
+  wa(el){ const x = DATA.shops.find(z => z.id === el.dataset.id); const item = el.dataset.item;
+    sheet({type:"wa", name:nameOf(x), phone:x.wa, msg: item ? t("whatsappAskItem", {item}) : t("whatsappHello")}); },
+  report(){ sheet({type:"report"}); },
+  sendReport(){ closeOverlay(); snack(t("reportThanks")); },
+  async save(){
+    const s = cur(), m = s.res.matches[s.sel || 0];
+    const photo = await thumb(s.photo);
+    const item = {id: String(Date.now()), taxonId:m.taxonId, kind:m.kind, sci:m.sci, en:m.en, bn:m.bn, nickname:"", photo, savedAt:Date.now(), reminders:[]};
+    if (!S.phone) { S.pendingSave = item; push({name:"signin"}); return; }
+    S.collection.unshift(item); persist(); snack(t("savedToCollection"));
+  },
+  verifyPhone(){ push({name:"signin"}); },
+  sendCode(){
+    const s = cur(); const raw = document.getElementById("phoneIn").value.replace(/[\s-]/g, "");
+    const digits = raw.replace(/[০-৯]/g, d => "০১২৩৪৫৬৭৮৯".indexOf(d));
+    const m = digits.match(/^(?:\+?88)?(01[3-9]\d{8})$/);
+    s.phone = raw;
+    if (!m) { s.phoneErr = true; render(); return; }
+    s.phoneErr = false; s.normalised = "+88" + m[1]; s.codeSent = true; render();
+    setTimeout(() => document.getElementById("codeIn")?.focus(), 50);
+  },
+  resend(){ snack(t("sendCode") + " ✓"); },
+  verifyCode(){
+    const s = cur(); const code = document.getElementById("codeIn").value.replace(/[০-৯]/g, d => "০১২৩৪৫৬৭৮৯".indexOf(d));
+    if (!/^\d{6}$/.test(code)) { s.codeErr = true; render(); return; }
+    S.phone = s.normalised; S.stack.pop();
+    if (S.pendingSave) { S.collection.unshift(S.pendingSave); S.pendingSave = null; persist(); render(); snack(t("savedToCollection")); }
+    else { persist(); render(); snack(t("signedInAs", {phone: S.phone})); }
+  },
+  openItem(el){ push({name:"item", id:el.dataset.id}); },
+  saveNick(){ const c = S.collection.find(x => x.id === cur().id); c.nickname = document.getElementById("nickIn").value.trim().slice(0, 60); persist(); render(); snack(t("save") + " ✓"); },
+  itemCare(){ const c = S.collection.find(x => x.id === cur().id); push({name:"care", taxonId:c.taxonId, kind:c.kind}); },
+  addReminder(){ const c = S.collection.find(x => x.id === cur().id); sheet({type:"reminder", kind:c.kind, ty: REMINDER_TYPES(c.kind)[0]}); },
+  remType(el){ S.overlay.ty = el.dataset.ty; document.querySelectorAll("#remTypes .fchip").forEach(b => b.classList.toggle("on", b === el)); },
+  saveReminder(){
+    const d = document.getElementById("remDate").value, tm = document.getElementById("remTime").value;
+    const when = new Date(d + "T" + (tm || "09:00"));
+    if (!d || isNaN(when) || when.getTime() <= Date.now()) { document.getElementById("remErr").textContent = t("reminderInPast"); return; }
+    const c = S.collection.find(x => x.id === cur().id);
+    c.reminders.push({id:String(Date.now()), type:S.overlay.ty, label:document.getElementById("remLabel").value.trim(), next:when.getTime(), every:+document.getElementById("remRepeat").value || null});
+    persist(); closeOverlay(); render();
+  },
+  doneReminder(el){
+    const c = S.collection.find(x => x.id === cur().id); const r = c.reminders.find(x => x.id === el.dataset.rid);
+    if (r.every) { let n = r.next; while (n <= Date.now()) n += r.every * 864e5; if (n === r.next) n += r.every * 864e5; r.next = n; }
+    else c.reminders = c.reminders.filter(x => x !== r);
+    persist(); render();
+  },
+  delReminder(el){ const c = S.collection.find(x => x.id === cur().id); c.reminders = c.reminders.filter(x => x.id !== el.dataset.rid); persist(); render(); },
+  deleteItem(){ const id = cur().id; sheet({type:"confirm", text:t("deleteItemConfirm"), yes:t("delete"), run(){ S.collection = S.collection.filter(x => x.id !== id); persist(); pop(); }}); },
+  confirmYes(){ const o = S.overlay; closeOverlay(); o.run(); },
+  signOut(){ S.phone = null; persist(); render(); },
+  deleteAccount(){ sheet({type:"confirm", text:t("deleteAccountConfirm"), yes:t("delete"), run(){
+    S.collection = []; S.recent = []; S.phone = null; S.onboarded = false; S.located = false; S.stack = []; S.tab = "identify";
+    ["recent","collection","phone","onboarded"].forEach(store.del); render(true); snack(t("accountDeleted")); }}); },
+  about(){ sheet({type:"info", title:t("disclaimerTitle"), text:t("disclaimerBody")}); },
+};
+
+document.addEventListener("click", ev => {
+  const el = ev.target.closest("[data-a]");
+  if (!el || el.tagName === "INPUT") return;
+  const fn = A[el.dataset.a];
+  if (fn) { fn(el, ev); }
+});
+document.addEventListener("change", ev => {
+  const el = ev.target;
+  if (el.dataset && el.dataset.a === "lang") A.lang(el);
+  if (el.id === "fileCam" || el.id === "fileGal") onFile(el);
+});
+
+render(true);
+
+/* Live identification lights up only when this view can ask Claude with images. */
+(async () => {
+  try {
+    if (!window.claude || typeof window.claude.use !== "function") return;
+    const sample = await window.claude.use("sample");
+    if (!sample) return;
+    S.live = sample;
+    const lim = await sample.limits().catch(() => null);
+    S.liveImages = !!(lim && lim.images);
+    if (S.overlay) renderOverlay();
+    if (cur() && cur().name === "result") render();
+  } catch(e) {}
+})();
+</script>

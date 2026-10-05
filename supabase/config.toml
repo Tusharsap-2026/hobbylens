@@ -1,0 +1,43 @@
+# Supabase CLI project settings for local development (`supabase start`).
+# Only the settings HobbyLens depends on are listed; everything else uses CLI defaults.
+# Production settings are made in the Supabase dashboard: see docs/SETUP.md.
+project_id = "hobbylens"
+
+[db.seed]
+enabled = true
+sql_paths = ["./seed.sql"]
+
+[auth]
+site_url = "http://localhost:3000"
+# Every install starts as an anonymous guest; the phone is linked at the first save.
+enable_anonymous_sign_ins = true
+enable_signup = true
+
+[auth.sms]
+enable_signup = true
+enable_confirmations = true
+template = "HobbyLens code: {{ .Code }}"
+max_frequency = "60s"
+
+# OTP codes are sent by our own function through a Bangladeshi SMS gateway.
+[auth.hook.send_sms]
+enabled = true
+uri = "http://host.docker.internal:54321/functions/v1/send-sms"
+secrets = "env(SEND_SMS_HOOK_SECRET)"
+
+[functions.identify]
+verify_jwt = true
+
+[functions.care-tips]
+verify_jwt = true
+
+[functions.delete-account]
+verify_jwt = true
+
+# Called by Supabase Auth with a signed webhook, not a user token.
+[functions.send-sms]
+verify_jwt = false
+
+# Called by the scheduled job with CLEANUP_SECRET.
+[functions.cleanup]
+verify_jwt = false

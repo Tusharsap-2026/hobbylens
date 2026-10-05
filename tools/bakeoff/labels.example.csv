@@ -1,0 +1,9 @@
+file,kind,expected,also_accept,group
+money_plant_01.jpg,plant,Epipremnum aureum,Scindapsus aureus|Pothos aureus,foliage
+snake_plant_01.jpg,plant,Dracaena trifasciata,Sansevieria trifasciata,foliage
+aglaonema_01.jpg,plant,Aglaonema commutatum,,foliage
+rose_01.jpg,plant,Rosa chinensis,Rosa × hybrida|Rosa hybrida,rose
+tulsi_01.jpg,plant,Ocimum tenuiflorum,Ocimum sanctum,herb
+mango_sapling_01.jpg,plant,Mangifera indica,,fruit
+orchid_01.jpg,plant,Dendrobium nobile,,orchid
+cat_01.jpg,cat,Mixed breed cat,Domestic shorthair,cats
