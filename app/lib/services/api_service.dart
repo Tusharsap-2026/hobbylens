@@ -42,7 +42,7 @@ class ApiService {
     final data = await _invoke('identify', {
       'image_base64': base64Encode(jpeg),
       'category': category.name,
-      if (hint != null) 'hint': hint,
+      'hint': ?hint,
     }, _identifyTimeout);
     return IdentifyResult.fromJson(data);
   }
