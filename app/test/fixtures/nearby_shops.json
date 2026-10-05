@@ -1,0 +1,130 @@
+[
+  {
+    "id": "00000000-0000-4000-8000-000000000001",
+    "name_en": "Demo Green Nursery",
+    "name_bn": "ডেমো গ্রিন নার্সারি",
+    "shop_type": "nursery",
+    "lat": 22.3596,
+    "lng": 91.8215,
+    "distance_m": 0,
+    "address_en": "Demo address 1",
+    "address_bn": null,
+    "area": "GEC",
+    "phone": "+8801700000001",
+    "whatsapp": "+8801700000001",
+    "opening_hours": {
+      "fri": [
+        [
+          "15:00",
+          "21:00"
+        ]
+      ],
+      "mon": [
+        [
+          "09:00",
+          "21:00"
+        ]
+      ],
+      "sat": [
+        [
+          "09:00",
+          "21:00"
+        ]
+      ],
+      "sun": [
+        [
+          "09:00",
+          "21:00"
+        ]
+      ],
+      "thu": [
+        [
+          "09:00",
+          "21:00"
+        ]
+      ],
+      "tue": [
+        [
+          "09:00",
+          "21:00"
+        ]
+      ],
+      "wed": [
+        [
+          "09:00",
+          "21:00"
+        ]
+      ]
+    },
+    "open_now": false,
+    "rating": 4.5,
+    "rating_count": 12,
+    "verified_at": "2026-10-05T01:21:33.613061+06:00",
+    "is_partner": true,
+    "category_match": true,
+    "in_stock": true,
+    "stock_price_bdt": 250,
+    "stock_confirmed_at": "2026-10-03T01:21:33.621256+06:00"
+  },
+  {
+    "id": "00000000-0000-4000-8000-000000000002",
+    "name_en": "Demo Orchid House",
+    "name_bn": "ডেমো অর্কিড হাউস",
+    "shop_type": "nursery",
+    "lat": 22.365,
+    "lng": 91.83,
+    "distance_m": 1060,
+    "address_en": "Demo address 2",
+    "address_bn": null,
+    "area": "Nasirabad",
+    "phone": "+8801700000002",
+    "whatsapp": null,
+    "opening_hours": {
+      "mon": [
+        [
+          "10:00",
+          "20:00"
+        ]
+      ],
+      "sat": [
+        [
+          "10:00",
+          "20:00"
+        ]
+      ],
+      "sun": [
+        [
+          "10:00",
+          "20:00"
+        ]
+      ],
+      "thu": [
+        [
+          "10:00",
+          "20:00"
+        ]
+      ],
+      "tue": [
+        [
+          "10:00",
+          "20:00"
+        ]
+      ],
+      "wed": [
+        [
+          "10:00",
+          "20:00"
+        ]
+      ]
+    },
+    "open_now": false,
+    "rating": null,
+    "rating_count": 0,
+    "verified_at": "2026-10-05T01:21:33.613061+06:00",
+    "is_partner": false,
+    "category_match": false,
+    "in_stock": false,
+    "stock_price_bdt": null,
+    "stock_confirmed_at": null
+  }
+]

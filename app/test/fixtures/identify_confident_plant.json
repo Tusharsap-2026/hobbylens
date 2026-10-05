@@ -1,0 +1,91 @@
+{
+  "identificationId": "00000000-0000-4000-a000-000000000001",
+  "status": "confident",
+  "requestedCategory": "plant",
+  "detectedCategory": "plant",
+  "engine": "plantid",
+  "matches": [
+    {
+      "rank": 1,
+      "taxonId": 3,
+      "taxonKey": "money_plant",
+      "scientificName": "Epipremnum aureum",
+      "nameEn": "Money plant (golden pothos)",
+      "nameBn": "মানি প্ল্যান্ট",
+      "confidence": 0.91,
+      "confidenceBand": "high",
+      "petSafety": "toxic_both",
+      "care": {
+        "status": "draft",
+        "isFallback": false,
+        "tips": [
+          {
+            "topic": "light",
+            "en": "Bright, indirect light. Copes with low light but grows slowly; keep it out of harsh afternoon sun.",
+            "bn": "উজ্জ্বল কিন্তু পরোক্ষ আলো। কম আলোতেও টিকে থাকে, তবে ধীরে বাড়ে; দুপুরের কড়া রোদ থেকে দূরে রাখুন।"
+          },
+          {
+            "topic": "water",
+            "en": "Water when the top 2–3 cm of soil is dry. Do not let the pot stand in water.",
+            "bn": "মাটির ওপরের ২–৩ সেমি শুকিয়ে গেলে পানি দিন। টবের নিচে পানি জমে থাকতে দেবেন না।"
+          },
+          {
+            "topic": "soil",
+            "en": "Loose, well-draining potting mix. Cuttings also grow in a jar of clean water.",
+            "bn": "ঝুরঝুরে, সহজে পানি নিষ্কাশন হয় এমন মাটি। ডাল কেটে পরিষ্কার পানির বোতলেও জন্মানো যায়।"
+          }
+        ]
+      }
+    },
+    {
+      "rank": 2,
+      "taxonId": null,
+      "taxonKey": null,
+      "scientificName": "Philodendron hederaceum",
+      "nameEn": "Heartleaf philodendron",
+      "nameBn": null,
+      "confidence": 0.05,
+      "confidenceBand": "low",
+      "petSafety": null,
+      "care": null
+    },
+    {
+      "rank": 3,
+      "taxonId": 2,
+      "taxonKey": "snake_plant",
+      "scientificName": "Dracaena trifasciata",
+      "nameEn": "Snake plant",
+      "nameBn": "স্নেক প্ল্যান্ট",
+      "confidence": 0.02,
+      "confidenceBand": "low",
+      "petSafety": "toxic_both",
+      "care": {
+        "status": "draft",
+        "isFallback": false,
+        "tips": [
+          {
+            "topic": "light",
+            "en": "Bright, indirect light is best; it also copes with low light.",
+            "bn": "পরোক্ষ উজ্জ্বল আলো সবচেয়ে ভালো; কম আলোতেও মানিয়ে নেয়।"
+          },
+          {
+            "topic": "water",
+            "en": "Water only when the soil is completely dry, roughly every 2–3 weeks and less in winter. Overwatering rots the roots.",
+            "bn": "মাটি পুরো শুকিয়ে গেলে তবেই পানি দিন, সাধারণত ২–৩ সপ্তাহে একবার, শীতে আরও কম। বেশি পানিতে শিকড় পচে যায়।"
+          },
+          {
+            "topic": "soil",
+            "en": "Sandy, fast-draining mix such as cactus mix, in a pot with a drainage hole.",
+            "bn": "বালুমিশ্রিত, দ্রুত পানি নিষ্কাশন হয় এমন মাটি, যেমন ক্যাকটাস মিক্স; টবের নিচে ছিদ্র থাকতে হবে।"
+          }
+        ]
+      }
+    }
+  ],
+  "vetAdvice": false,
+  "quota": {
+    "used": 2,
+    "limit": 10
+  },
+  "responseMs": 0
+}

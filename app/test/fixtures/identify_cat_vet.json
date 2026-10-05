@@ -1,0 +1,89 @@
+{
+  "identificationId": "00000000-0000-4000-a000-000000000003",
+  "status": "confident",
+  "requestedCategory": "cat",
+  "detectedCategory": "cat",
+  "engine": "vision:gemini",
+  "matches": [
+    {
+      "rank": 1,
+      "taxonId": 17,
+      "taxonKey": "cat_persian",
+      "scientificName": "Felis catus",
+      "nameEn": "Persian cat",
+      "nameBn": "পারস্য বিড়াল",
+      "confidence": 0.9,
+      "confidenceBand": "high",
+      "petSafety": null,
+      "care": {
+        "status": "draft",
+        "isFallback": true,
+        "tips": [
+          {
+            "topic": "food",
+            "en": "Feed a complete cat food; cats need animal protein. Keep clean water out at all times.",
+            "bn": "পূর্ণাঙ্গ বিড়ালের খাবার দিন; বিড়ালের প্রাণিজ প্রোটিন দরকার। সবসময় পরিষ্কার পানি রাখুন।"
+          },
+          {
+            "topic": "space",
+            "en": "A clean litter box, a scratching post and a quiet place to hide.",
+            "bn": "পরিষ্কার লিটার বক্স, আঁচড়ানোর খুঁটি এবং লুকানোর মতো নিরিবিলি জায়গা।"
+          },
+          {
+            "topic": "grooming",
+            "en": "Brush weekly; long-haired cats such as Persians need brushing every day.",
+            "bn": "সপ্তাহে একবার আঁচড়ে দিন; পারস্য বিড়ালের মতো লম্বা লোমের বিড়ালকে প্রতিদিন।"
+          },
+          {
+            "topic": "vaccination",
+            "en": "Ask a vet for a vaccination and deworming schedule.",
+            "bn": "টিকা ও কৃমিনাশকের সময়সূচি পশু চিকিৎসকের কাছ থেকে জেনে নিন।"
+          }
+        ]
+      }
+    },
+    {
+      "rank": 2,
+      "taxonId": 18,
+      "taxonKey": "cat_local",
+      "scientificName": "Felis catus",
+      "nameEn": "Domestic cat (local or mixed breed)",
+      "nameBn": "দেশি বিড়াল",
+      "confidence": 0.4,
+      "confidenceBand": "low",
+      "petSafety": null,
+      "care": {
+        "status": "draft",
+        "isFallback": true,
+        "tips": [
+          {
+            "topic": "food",
+            "en": "Feed a complete cat food; cats need animal protein. Keep clean water out at all times.",
+            "bn": "পূর্ণাঙ্গ বিড়ালের খাবার দিন; বিড়ালের প্রাণিজ প্রোটিন দরকার। সবসময় পরিষ্কার পানি রাখুন।"
+          },
+          {
+            "topic": "space",
+            "en": "A clean litter box, a scratching post and a quiet place to hide.",
+            "bn": "পরিষ্কার লিটার বক্স, আঁচড়ানোর খুঁটি এবং লুকানোর মতো নিরিবিলি জায়গা।"
+          },
+          {
+            "topic": "grooming",
+            "en": "Brush weekly; long-haired cats such as Persians need brushing every day.",
+            "bn": "সপ্তাহে একবার আঁচড়ে দিন; পারস্য বিড়ালের মতো লম্বা লোমের বিড়ালকে প্রতিদিন।"
+          },
+          {
+            "topic": "vaccination",
+            "en": "Ask a vet for a vaccination and deworming schedule.",
+            "bn": "টিকা ও কৃমিনাশকের সময়সূচি পশু চিকিৎসকের কাছ থেকে জেনে নিন।"
+          }
+        ]
+      }
+    }
+  ],
+  "vetAdvice": true,
+  "quota": {
+    "used": 4,
+    "limit": 10
+  },
+  "responseMs": 0
+}

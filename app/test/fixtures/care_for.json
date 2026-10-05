@@ -1,0 +1,34 @@
+[
+  {
+    "care_card_id": 9,
+    "status": "draft",
+    "is_fallback": true,
+    "topic": "food",
+    "body_en": "Feed a complete cat food; cats need animal protein. Keep clean water out at all times.",
+    "body_bn": "পূর্ণাঙ্গ বিড়ালের খাবার দিন; বিড়ালের প্রাণিজ প্রোটিন দরকার। সবসময় পরিষ্কার পানি রাখুন।"
+  },
+  {
+    "care_card_id": 9,
+    "status": "draft",
+    "is_fallback": true,
+    "topic": "space",
+    "body_en": "A clean litter box, a scratching post and a quiet place to hide.",
+    "body_bn": "পরিষ্কার লিটার বক্স, আঁচড়ানোর খুঁটি এবং লুকানোর মতো নিরিবিলি জায়গা।"
+  },
+  {
+    "care_card_id": 9,
+    "status": "draft",
+    "is_fallback": true,
+    "topic": "grooming",
+    "body_en": "Brush weekly; long-haired cats such as Persians need brushing every day.",
+    "body_bn": "সপ্তাহে একবার আঁচড়ে দিন; পারস্য বিড়ালের মতো লম্বা লোমের বিড়ালকে প্রতিদিন।"
+  },
+  {
+    "care_card_id": 9,
+    "status": "draft",
+    "is_fallback": true,
+    "topic": "vaccination",
+    "body_en": "Ask a vet for a vaccination and deworming schedule.",
+    "body_bn": "টিকা ও কৃমিনাশকের সময়সূচি পশু চিকিৎসকের কাছ থেকে জেনে নিন।"
+  }
+]

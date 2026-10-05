@@ -1,0 +1,14 @@
+{
+  "identificationId": "00000000-0000-4000-a000-000000000004",
+  "status": "not_recognised",
+  "requestedCategory": "auto",
+  "detectedCategory": null,
+  "engine": "vision:gemini",
+  "matches": [],
+  "vetAdvice": false,
+  "quota": {
+    "used": 5,
+    "limit": 10
+  },
+  "responseMs": 0
+}

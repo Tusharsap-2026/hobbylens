@@ -1,0 +1,299 @@
+{
+  "@@locale": "en",
+  "appTitle": "HobbyLens",
+  "welcomeTitle": "Identify plants and pets",
+  "welcomeBody": "Take a photo to find out what it is, how to care for it, and where to buy what you need nearby.",
+  "chooseLanguage": "Choose your language",
+  "disclaimerTitle": "Before you start",
+  "disclaimerBody": "Identification can be wrong. Care tips are general guidance, not expert advice. For any health problem in a pet, please consult a veterinarian.",
+  "getStarted": "Get started",
+  "notConfigured": "This build is missing its server settings. Rebuild with SUPABASE_URL and SUPABASE_PUBLISHABLE_KEY.",
+  "navIdentify": "Identify",
+  "navCollection": "My Collection",
+  "navSettings": "Settings",
+  "homeTitle": "What would you like to identify?",
+  "categoryPlant": "Plant",
+  "categoryCat": "Cat",
+  "categoryDog": "Dog",
+  "categoryBird": "Bird",
+  "categoryAuto": "Detect automatically",
+  "recentIdentifications": "Recent",
+  "takePhoto": "Take a photo",
+  "chooseFromGallery": "Choose from gallery",
+  "photoTipsTitle": "For the best result",
+  "photoTipPlant": "One plant in the frame, with a leaf or flower in sharp focus, in daylight.",
+  "photoTipAnimal": "The whole animal, facing the camera, in good light.",
+  "notPlantOrPetTitle": "This doesn't look like a plant or pet",
+  "notPlantOrPetBody": "Identify it anyway, or take another photo?",
+  "identifyAnyway": "Identify anyway",
+  "identifying": "Identifying…",
+  "slowNetwork": "This is taking longer than usual. The network may be slow.",
+  "errorNoInternet": "No internet connection. Check your connection and try again.",
+  "errorServer": "Something went wrong on our side. Please try again.",
+  "errorTimeout": "That took too long. Please try again.",
+  "errorQuota": "You have reached today's limit of {limit} identifications. Please try again tomorrow.",
+  "@errorQuota": {
+    "placeholders": {
+      "limit": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "errorPhoto": "This photo could not be used. Please try another.",
+  "tryAgain": "Try again",
+  "resultTitle": "Result",
+  "confidencePercent": "{percent} match",
+  "@confidencePercent": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "bandHigh": "High confidence",
+  "bandMedium": "Medium confidence",
+  "bandLow": "Low confidence",
+  "otherPossibilities": "Other possibilities",
+  "careBasics": "Care basics",
+  "careDraft": "Draft tips, not yet checked by an expert.",
+  "careAiGenerated": "Written by AI and not checked by an expert.",
+  "careGeneral": "General tips for this kind of animal.",
+  "careNone": "No care tips for this one yet.",
+  "loadCareTips": "Show care tips",
+  "topicLight": "Light",
+  "topicWater": "Water",
+  "topicSoil": "Soil",
+  "topicTemperature": "Temperature",
+  "topicFertiliser": "Fertiliser",
+  "topicFood": "Food",
+  "topicSpace": "Space",
+  "topicGrooming": "Grooming",
+  "topicExercise": "Exercise",
+  "topicVaccination": "Vaccination",
+  "petSafeSafe": "Not known to be toxic to cats and dogs",
+  "petSafeToxicBoth": "Toxic to cats and dogs",
+  "petSafeToxicCats": "Toxic to cats",
+  "petSafeToxicDogs": "Toxic to dogs",
+  "petSafeUnknown": "Safety around pets not confirmed",
+  "whereToBuy": "Where to buy near me",
+  "whereToBuySupplies": "Pet shops near me",
+  "whatYouNeed": "What you'll need",
+  "saveToCollection": "Save to My Collection",
+  "savedToCollection": "Saved to My Collection",
+  "notRight": "Not right?",
+  "resultDisclaimer": "Identification can be wrong. Tips are general guidance.",
+  "vetAdviceTitle": "Health worry?",
+  "vetAdviceBody": "We can't assess health from a photo. Please consult a veterinarian.",
+  "findVet": "Find a vet nearby",
+  "detectedDifferent": "This looks like a {kind}, so we identified it as one.",
+  "@detectedDifferent": {
+    "placeholders": {
+      "kind": {
+        "type": "String"
+      }
+    }
+  },
+  "lowConfidenceTitle": "We're not sure about this one",
+  "lowConfidenceBody": "Even the best match is below 60%, so we won't present it as certain. Try another photo or a different angle.",
+  "possibleMatches": "Possible, not confirmed",
+  "retakePhoto": "Take another photo",
+  "notRecognisedTitle": "We couldn't recognise this photo",
+  "notRecognisedBody": "Make sure the photo shows one plant, cat, dog or bird clearly, in good light.",
+  "retakeTips": "Move closer, avoid blur, and include a leaf or the animal's face.",
+  "locationWhyTitle": "Find shops near you",
+  "locationWhyBody": "We use your location only now, to find nearby shops. It is not stored or shared with shops.",
+  "allowLocation": "Use my location",
+  "locationDenied": "Location permission is off. You can turn it on in your phone settings.",
+  "locationServiceOff": "Turn on location (GPS) on your phone to search nearby.",
+  "locationUnavailable": "We couldn't get your location. Move to an open area and try again.",
+  "openSettings": "Open settings",
+  "radiusKm": "{km} km",
+  "@radiusKm": {
+    "placeholders": {
+      "km": {
+        "type": "String"
+      }
+    }
+  },
+  "noShopsFound": "No shops found within {km} km. Try a wider area.",
+  "@noShopsFound": {
+    "placeholders": {
+      "km": {
+        "type": "String"
+      }
+    }
+  },
+  "shopNursery": "Nursery",
+  "shopPetShop": "Pet shop",
+  "shopVetSupply": "Vet supply store",
+  "shopVetClinic": "Vet clinic",
+  "distanceKm": "{distance} km away",
+  "@distanceKm": {
+    "placeholders": {
+      "distance": {
+        "type": "String"
+      }
+    }
+  },
+  "distanceM": "{distance} m away",
+  "@distanceM": {
+    "placeholders": {
+      "distance": {
+        "type": "String"
+      }
+    }
+  },
+  "openNow": "Open now",
+  "closedNow": "Closed now",
+  "hoursUnknown": "Hours not known",
+  "inStockBadge": "Has this in stock",
+  "likelyAvailable": "Likely available, call to confirm",
+  "verifiedShop": "Verified",
+  "ratingLabel": "Rated {rating} from {count} reviews",
+  "@ratingLabel": {
+    "placeholders": {
+      "rating": {
+        "type": "String"
+      },
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "callShop": "Call",
+  "whatsappShop": "WhatsApp",
+  "directions": "Directions",
+  "couldNotOpen": "Could not open this on your phone.",
+  "whatsappAskItem": "Hello, I found your shop on HobbyLens. Do you have {item}?",
+  "@whatsappAskItem": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      }
+    }
+  },
+  "whatsappHello": "Hello, I found your shop on HobbyLens.",
+  "shopAddress": "Address",
+  "openingHours": "Opening hours",
+  "closedDay": "Closed",
+  "essential": "Essential",
+  "niceToHave": "Nice to have",
+  "priceRange": "৳{min} to ৳{max}",
+  "@priceRange": {
+    "placeholders": {
+      "min": {
+        "type": "String"
+      },
+      "max": {
+        "type": "String"
+      }
+    }
+  },
+  "priceFrom": "From ৳{min}",
+  "@priceFrom": {
+    "placeholders": {
+      "min": {
+        "type": "String"
+      }
+    }
+  },
+  "priceAskShop": "Ask the shop for the price",
+  "accessoriesEmpty": "No accessories listed yet.",
+  "collectionEmpty": "Nothing saved yet. Identify a plant or pet and tap Save.",
+  "nickname": "Name",
+  "nicknameHint": "For example, balcony money plant",
+  "reminders": "Reminders",
+  "addReminder": "Add reminder",
+  "noReminders": "No reminders yet.",
+  "reminderWater": "Water",
+  "reminderFertilise": "Fertilise",
+  "reminderFeed": "Feed",
+  "reminderGroom": "Groom",
+  "reminderVaccinate": "Vaccination",
+  "reminderCustom": "Other",
+  "reminderLabel": "Note (optional)",
+  "reminderRepeat": "Repeat",
+  "reminderOnce": "Once",
+  "everyNDays": "{days, plural, =1{Every day} other{Every {days} days}}",
+  "@everyNDays": {
+    "placeholders": {
+      "days": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "reminderNext": "Next: {date}",
+  "@reminderNext": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "reminderDate": "Date",
+  "reminderTime": "Time",
+  "reminderInPast": "Choose a time later than now.",
+  "markDone": "Done",
+  "notificationBody": "Tap to open HobbyLens.",
+  "notificationsOff": "Notifications are off, so reminders can't reach you. Turn them on in your phone settings.",
+  "save": "Save",
+  "cancel": "Cancel",
+  "delete": "Delete",
+  "deleteItemConfirm": "Delete this from My Collection? Its reminders will be deleted too.",
+  "signInTitle": "Verify your phone to save",
+  "signInBody": "We'll send a code by SMS. Your number is used only to keep your collection safe.",
+  "phoneLabel": "Mobile number",
+  "phoneHint": "01XXXXXXXXX",
+  "phoneInvalid": "Enter a valid Bangladeshi mobile number.",
+  "sendCode": "Send code",
+  "codeLabel": "Code from SMS",
+  "verify": "Verify",
+  "codeInvalid": "That code didn't work. Check it or ask for a new one.",
+  "resendCode": "Send a new code",
+  "resendIn": "New code in {seconds} s",
+  "@resendIn": {
+    "placeholders": {
+      "seconds": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "phoneExistsSwitch": "This number already has an account. We'll sign you in to it.",
+  "vetHelpTitle": "Please consult a veterinarian",
+  "vetHelpBody": "HobbyLens can't diagnose illness. If your pet seems unwell, contact a vet as soon as possible.",
+  "vetClinicsNearby": "Vet clinics near you",
+  "reportTitle": "What's wrong?",
+  "reportWrongMatch": "It's a different plant or animal",
+  "reportNotPlantOrPet": "It's not a plant or pet",
+  "reportOther": "Something else",
+  "reportSuggestedName": "What is it? (optional)",
+  "reportNote": "Anything else? (optional)",
+  "reportSend": "Send",
+  "reportThanks": "Thank you. We review every report.",
+  "settingsLanguage": "Language",
+  "languageBangla": "বাংলা",
+  "languageEnglish": "English",
+  "settingsAccount": "Account",
+  "signedInAs": "Signed in as {phone}",
+  "@signedInAs": {
+    "placeholders": {
+      "phone": {
+        "type": "String"
+      }
+    }
+  },
+  "guestAccount": "Guest. Verify your phone to save to My Collection.",
+  "verifyPhone": "Verify phone",
+  "signOut": "Sign out",
+  "signOutUnsynced": "Some changes haven't synced yet. Connect to the internet before signing out, or they will be lost.",
+  "signOutAnyway": "Sign out anyway",
+  "deleteAccount": "Delete account and all data",
+  "deleteAccountConfirm": "This permanently deletes your account, collection, reminders and photos. It cannot be undone.",
+  "accountDeleted": "Your account and data have been deleted.",
+  "settingsPrivacy": "Privacy",
+  "privacySummary": "Photos you don't save are deleted within 24 hours. Your location is used only while you search for shops and is never stored. Nothing is shared with shops unless you call or message them.",
+  "settingsAbout": "About and disclaimer"
+}

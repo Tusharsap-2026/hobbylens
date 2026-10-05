@@ -1,0 +1,64 @@
+{
+  "identificationId": "00000000-0000-4000-a000-000000000002",
+  "status": "low_confidence",
+  "requestedCategory": "plant",
+  "detectedCategory": "plant",
+  "engine": "plantid",
+  "matches": [
+    {
+      "rank": 1,
+      "taxonId": 1,
+      "taxonKey": "aglaonema",
+      "scientificName": "Aglaonema",
+      "nameEn": "Aglaonema (Chinese evergreen)",
+      "nameBn": "অ্যাগলোনেমা",
+      "confidence": 0.42,
+      "confidenceBand": "low",
+      "petSafety": "toxic_both",
+      "care": {
+        "status": "draft",
+        "isFallback": false,
+        "tips": [
+          {
+            "topic": "light",
+            "en": "Medium to bright indirect light; no direct sun on the leaves.",
+            "bn": "মাঝারি থেকে উজ্জ্বল পরোক্ষ আলো; পাতায় সরাসরি রোদ লাগাবেন না।"
+          },
+          {
+            "topic": "water",
+            "en": "Keep the soil lightly moist; water when the top 2–3 cm is dry.",
+            "bn": "মাটি হালকা ভেজা রাখুন; ওপরের ২–৩ সেমি শুকালে পানি দিন।"
+          },
+          {
+            "topic": "soil",
+            "en": "Well-draining potting mix rich in organic matter.",
+            "bn": "জৈব উপাদানসমৃদ্ধ, পানি নিষ্কাশন হয় এমন মাটি।"
+          },
+          {
+            "topic": "temperature",
+            "en": "Dislikes cold; keep it away from air-conditioner vents.",
+            "bn": "ঠান্ডা সহ্য করতে পারে না; এসির বাতাস থেকে দূরে রাখুন।"
+          }
+        ]
+      }
+    },
+    {
+      "rank": 2,
+      "taxonId": null,
+      "taxonKey": null,
+      "scientificName": "Dieffenbachia seguine",
+      "nameEn": "Dumb cane",
+      "nameBn": null,
+      "confidence": 0.31,
+      "confidenceBand": "low",
+      "petSafety": null,
+      "care": null
+    }
+  ],
+  "vetAdvice": false,
+  "quota": {
+    "used": 3,
+    "limit": 10
+  },
+  "responseMs": 0
+}
